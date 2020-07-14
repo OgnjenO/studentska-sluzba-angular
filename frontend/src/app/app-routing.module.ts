@@ -8,6 +8,9 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { BoardUserComponent } from './pages/board-user/board-user.component';
 import { BoardModeratorComponent } from './pages/board-moderator/board-moderator.component';
 import { BoardAdminComponent } from './pages/board-admin/board-admin.component';
+import { AdminMainComponent } from './pages/admin/main/main.component';
+import { AuthGuard } from './_helpers/auth.guard';
+import { Role } from './_models/role';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -16,7 +19,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'user', component: BoardUserComponent },
   { path: 'mod', component: BoardModeratorComponent },
-  { path: 'admin', component: BoardAdminComponent },
+  { path: 'admin', component: AdminMainComponent, canActivate: [AuthGuard], data: {roles: [Role.admin]} },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
