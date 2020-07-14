@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './authentication/login/login.component';
@@ -16,6 +17,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { AdminMainComponent } from './pages/admin/main/main.component';
+import { ManageUsersComponent } from './pages/admin/manage/users/users.component';
 
 @NgModule({
   declarations: [
@@ -27,13 +29,15 @@ import { AdminMainComponent } from './pages/admin/main/main.component';
     BoardUserComponent,
     BoardModeratorComponent,
     ProfileComponent,
-    AdminMainComponent
+    AdminMainComponent,
+    ManageUsersComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

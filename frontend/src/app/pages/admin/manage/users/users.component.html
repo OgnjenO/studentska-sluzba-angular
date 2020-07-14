@@ -1,0 +1,30 @@
+<div class="container">
+    <header class="jumbotron">
+      <h3>
+        List of all users
+      </h3>
+    </header>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of userList">
+                <th scope="row">{{user.id}}</th>
+                <th>{{user.username}}</th>
+                <th>{{user.email}}</th>
+                <th><span *ngFor="let role of user.roles">{{role.name}} </span></th>
+                <th>
+                    <button type="button" class="btn btn-success mr-3"><fa-icon [icon]="editIcon"></fa-icon></button>
+                    <button type="button" class="btn btn-danger"><fa-icon [icon]="closeIcon"></fa-icon></button>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+</div>
