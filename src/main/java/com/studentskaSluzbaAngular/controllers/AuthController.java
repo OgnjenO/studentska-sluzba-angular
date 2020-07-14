@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +51,8 @@ public class AuthController {
 
 	@Autowired
 	JwtUtils jwtUtils;
+	
+	boolean isDisabledSignup = true;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -74,6 +77,12 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		if(isDisabledSignup) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Signup is disabled"));
+		}
+		
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
 					.badRequest()
@@ -126,5 +135,15 @@ public class AuthController {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+
+	@GetMapping("/canRegister")
+	public boolean canRegister() {
+		if(isDisabledSignup) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 }

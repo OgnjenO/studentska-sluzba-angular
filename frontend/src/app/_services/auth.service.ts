@@ -29,4 +29,8 @@ export class AuthService {
       password: user.password
     }, httpOptions);
   }
+
+  canRegister(): Observable<any> {
+    return this.http.get(AUTH_API + 'canRegister');
+  }
 }
