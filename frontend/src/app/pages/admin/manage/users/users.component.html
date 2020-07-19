@@ -3,10 +3,17 @@
       <h3>
         List of all users
       </h3>
+      <div class="alert alert-success" role="alert" *ngIf="successMessage">
+        {{successMessage}}
+      </div>
+      <div class="alert alert-success" role="alert" *ngIf="errorMessage">
+        {{errorMessage}}
+      </div>
     </header>
     <table class="table">
         <thead class="thead-dark">
             <tr>
+                <th scope="col">#</th>
                 <th scope="col">id</th>
                 <th scope="col">Username</th>
                 <th scope="col">Email</th>
@@ -15,16 +22,163 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let user of userList">
+            <tr *ngFor="let user of userList; index as i">
+                <th scope="row">{{i}}</th>
                 <th scope="row">{{user.id}}</th>
                 <th>{{user.username}}</th>
                 <th>{{user.email}}</th>
                 <th><span *ngFor="let role of user.roles">{{role.name}} </span></th>
                 <th>
-                    <button type="button" class="btn btn-success mr-3"><fa-icon [icon]="editIcon"></fa-icon></button>
+                    <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#exampleModal" (click)="openModal(i)"><fa-icon [icon]="editIcon"></fa-icon></button>
                     <button type="button" class="btn btn-danger"><fa-icon [icon]="closeIcon"></fa-icon></button>
                 </th>
             </tr>
         </tbody>
     </table>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" *ngIf="this.targetUser">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{targetUser.firstname}} {{targetUser.lastname}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form
+                        name="form"
+                        (ngSubmit)="f.form.valid && onSaveUser()"
+                        #f="ngForm"
+                        novalidate
+                    >
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input
+                        type="text"
+                        class="form-control"
+                        name="username"
+                        [(ngModel)]="form.username"
+                        placeholder={{this.targetUser.username}}
+                        minlength="3"
+                        maxlength="20"
+                        #username="ngModel"
+                        />
+                        <div class="alert-danger" *ngIf="f.submitted && username.invalid">
+                        <div *ngIf="username.errors.required">Username is required</div>
+                        <div *ngIf="username.errors.minlength">
+                            Username must be at least 3 characters
+                        </div>
+                        <div *ngIf="username.errors.maxlength">
+                            Username must be at most 20 characters
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input
+                        type="email"
+                        class="form-control"
+                        name="email"
+                        [(ngModel)]="form.email"
+                        placeholder={{targetUser.email}}
+                        email
+                        #email="ngModel"
+                        />
+                        <div class="alert-danger" *ngIf="f.submitted && email.invalid">
+                        <div *ngIf="email.errors.required">Email is required</div>
+                        <div *ngIf="email.errors.email">
+                            Email must be a valid email address
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">First name</label>
+                        <input
+                        type="text"
+                        class="form-control"
+                        name="firstname"
+                        [(ngModel)]="form.firstname"
+                        placeholder={{targetUser.firstname}}
+                        minlength="3"
+                        maxlength="20"
+                        #firstname="ngModel"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Last name</label>
+                        <input
+                        type="text"
+                        class="form-control"
+                        name="lastname"
+                        [(ngModel)]="form.lastname"
+                        placeholder={{targetUser.lastname}}
+                        minlength="3"
+                        maxlength="20"
+                        #lastname="ngModel"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Grade</label>
+                        <input
+                        type="number"
+                        class="form-control"
+                        name="grade"
+                        [(ngModel)]="form.grade"
+                        placeholder={{targetUser.grade}}
+                        value=1
+                        #grade="ngModel"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Year</label>
+                        <input
+                        type="number"
+                        class="form-control"
+                        name="year"
+                        [(ngModel)]="form.year"
+                        placeholder={{targetUser.year}}
+                        value=1
+                        #grade="ngModel"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                        type="password"
+                        class="form-control"
+                        name="password"
+                        [(ngModel)]="form.password"
+                        minlength="6"
+                        #password="ngModel"
+                        />
+                        <div class="alert-danger" *ngIf="f.submitted && password.invalid">
+                        <div *ngIf="password.errors.required">Password is required</div>
+                        <div *ngIf="password.errors.minlength">
+                            Password must be at least 6 characters
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Role</label>
+                        <select
+                        name="role"
+                        [(ngModel)]="form.role"
+                        #role="ngModel"
+                        >
+                        <option *ngFor="let role of roles; let i = index">{{role}}</option>
+                        </select>
+                    </div>
+
+                    <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+                        Signup failed!<br />{{ errorMessage }}
+                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="onSaveUser()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

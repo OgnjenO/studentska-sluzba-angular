@@ -52,7 +52,7 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 	
-	boolean isDisabledSignup = true;
+	boolean isDisabledSignup = false;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -77,6 +77,7 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		System.out.println("Request : " + signUpRequest.toString());
 		if(isDisabledSignup) {
 			return ResponseEntity
 					.badRequest()
@@ -99,37 +100,16 @@ public class AuthController {
 		System.out.println(encoder.encode("admin"));
 		User user = new User(signUpRequest.getUsername(), 
 							 signUpRequest.getEmail(),
+							 signUpRequest.getFirstname(),
+							 signUpRequest.getLastname(),
+							 signUpRequest.getGrade(),
 							 encoder.encode(signUpRequest.getPassword()));
 
-		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
-
-		if (strRoles == null) {
-			Role studentRole = roleRepository.findByName(ERole.ROLE_STUDENT)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-			roles.add(studentRole);
-		} else {
-			strRoles.forEach(role -> {
-				switch (role) {
-				case "admin":
-					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(adminRole);
-
-					break;
-				case "profesor":
-					Role profesorRole = roleRepository.findByName(ERole.ROLE_PROFESOR)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(profesorRole);
-
-					break;
-				default:
-					Role studentRole = roleRepository.findByName(ERole.ROLE_STUDENT)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(studentRole);
-				}
-			});
-		}
+		System.out.println("Role : " + ERole.valueOf(signUpRequest.getRole()));
+		Role curRole = roleRepository.findByName(ERole.valueOf(signUpRequest.getRole()))
+				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+		roles.add(curRole);
 
 		user.setRoles(roles);
 		userRepository.save(user);

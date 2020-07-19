@@ -1,11 +1,13 @@
 package com.studentskaSluzbaAngular.models;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -27,6 +29,20 @@ public class User {
 	@Size(max = 50)
 	@Email
 	private String email;
+	
+	@NotBlank
+	@Size(max = 20)
+	private String firstname;
+	
+	@NotBlank
+	@Size(max = 20)
+	private String lastname;
+	
+	@NotNull
+	private int year;
+	
+	@NotNull
+	private int grade;
 
 	@NotBlank
 	@Size(max = 120)
@@ -41,9 +57,13 @@ public class User {
 	public User() {
 	}
 
-	public User(String username, String email, String password) {
+	public User(String username, String email, String firstname, String lastname, int grade, String password) {
 		this.username = username;
 		this.email = email;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.year = LocalDate.now().getYear();
+		this.grade = grade;
 		this.password = password;
 	}
 
@@ -69,6 +89,38 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public int getGrade() {
+		return grade;
+	}
+
+	public void setGrade(int grade) {
+		this.grade = grade;
 	}
 
 	public String getPassword() {

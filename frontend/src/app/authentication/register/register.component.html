@@ -53,6 +53,44 @@
         </div>
       </div>
       <div class="form-group">
+        <label for="username">First name</label>
+        <input
+          type="text"
+          class="form-control"
+          name="firstname"
+          [(ngModel)]="form.firstname"
+          required
+          minlength="3"
+          maxlength="20"
+          #firstname="ngModel"
+        />
+      </div>
+      <div class="form-group">
+        <label for="username">Last name</label>
+        <input
+          type="text"
+          class="form-control"
+          name="lastname"
+          [(ngModel)]="form.lastname"
+          required
+          minlength="3"
+          maxlength="20"
+          #lastname="ngModel"
+        />
+      </div>
+      <div class="form-group">
+        <label for="username">Grade</label>
+        <input
+          type="number"
+          class="form-control"
+          name="grade"
+          [(ngModel)]="form.grade"
+          required
+          value=1
+          #grade="ngModel"
+        />
+      </div>
+      <div class="form-group">
         <label for="password">Password</label>
         <input
           type="password"
@@ -69,6 +107,17 @@
             Password must be at least 6 characters
           </div>
         </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Role</label>
+        <select
+          name="role"
+          [(ngModel)]="form.role"
+          required
+          #role="ngModel"
+        >
+          <option *ngFor="let role of roles; let i = index">{{role}}</option>
+        </select>
       </div>
       <div class="form-group">
         <button class="btn btn-primary btn-block">Sign Up</button>

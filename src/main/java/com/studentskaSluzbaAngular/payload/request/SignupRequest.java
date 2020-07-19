@@ -1,7 +1,5 @@
 package com.studentskaSluzbaAngular.payload.request;
 
-import java.util.Set;
-
 import javax.validation.constraints.*;
  
 public class SignupRequest {
@@ -13,8 +11,20 @@ public class SignupRequest {
     @Size(max = 50)
     @Email
     private String email;
+	
+	@NotBlank
+	@Size(max = 20)
+	private String firstname;
+	
+	@NotBlank
+	@Size(max = 20)
+	private String lastname;
+	
+	@NotNull
+	private int grade;
     
-    private Set<String> role;
+	@NotBlank
+    private String role;
     
     @NotBlank
     @Size(min = 6, max = 40)
@@ -36,7 +46,31 @@ public class SignupRequest {
         this.email = email;
     }
  
-    public String getPassword() {
+    public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public int getGrade() {
+		return grade;
+	}
+
+	public void setGrade(int grade) {
+		this.grade = grade;
+	}
+
+	public String getPassword() {
         return password;
     }
  
@@ -44,11 +78,19 @@ public class SignupRequest {
         this.password = password;
     }
     
-    public Set<String> getRole() {
+    public String getRole() {
       return this.role;
     }
     
-    public void setRole(Set<String> role) {
+    public void setRole(String role) {
       this.role = role;
     }
+
+	@Override
+	public String toString() {
+		return "SignupRequest [username=" + username + ", email=" + email + ", firstname=" + firstname + ", lastname="
+				+ lastname + ", grade=" + grade + ", role=" + role + ", password=" + password + "]";
+	}
+    
+    
 }
