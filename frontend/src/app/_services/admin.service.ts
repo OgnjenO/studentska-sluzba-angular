@@ -31,4 +31,16 @@ export class AdminService {
       role: user.role
     }, httpOptions);
   }
+
+  createUser(user): Observable<any> {
+    return this.http.post(API_URL + 'createUser', {
+      username: user.username,
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      grade: user.grade,
+      password: user.password,
+      role: user.role
+    }, httpOptions);
+  }
 }

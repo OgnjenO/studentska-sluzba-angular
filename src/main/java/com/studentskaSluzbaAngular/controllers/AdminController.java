@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.studentskaSluzbaAngular.models.ERole;
 import com.studentskaSluzbaAngular.models.Role;
 import com.studentskaSluzbaAngular.models.User;
+import com.studentskaSluzbaAngular.payload.request.SignupRequest;
 import com.studentskaSluzbaAngular.payload.request.UpdateUserRequest;
 import com.studentskaSluzbaAngular.payload.response.MessageResponse;
 import com.studentskaSluzbaAngular.repository.RoleRepository;
@@ -51,7 +52,7 @@ public class AdminController {
 	
 	@PostMapping("/updateUser")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
+	public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
 		System.out.println("Request : " + updateUserRequest.toString());
 		Optional<User> targetUser = null;
 		if(!userRepository.existsById(updateUserRequest.getId())) {
@@ -84,6 +85,44 @@ public class AdminController {
 			
 		
 		return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
+	}
+
+	@PostMapping("/createUser")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> createUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		System.out.println("Request : " + signUpRequest.toString());
+		
+		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Username is already taken!"));
+		}
+
+		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Email is already in use!"));
+		}
+
+		// Create new user's account
+		System.out.println(encoder.encode("admin"));
+		User user = new User(signUpRequest.getUsername(), 
+							 signUpRequest.getEmail(),
+							 signUpRequest.getFirstname(),
+							 signUpRequest.getLastname(),
+							 signUpRequest.getGrade(),
+							 encoder.encode(signUpRequest.getPassword()));
+
+		Set<Role> roles = new HashSet<>();
+		System.out.println("Role : " + ERole.valueOf(signUpRequest.getRole()));
+		Role curRole = roleRepository.findByName(ERole.valueOf(signUpRequest.getRole()))
+				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+		roles.add(curRole);
+
+		user.setRoles(roles);
+		userRepository.save(user);
+
+		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 	
 	private boolean isEmpty(int test) {
