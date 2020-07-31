@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ import com.studentskaSluzbaAngular.repository.ClassRepository;
 @RequestMapping("/api/admin/class")
 public class ClassAdminController {
 	@Autowired
-	ClassRepository ClassRepository;
+	ClassRepository classRepository;
 
 	@Autowired
 	PasswordEncoder encoder;
@@ -35,7 +36,7 @@ public class ClassAdminController {
 	@GetMapping("/getClasses")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getClasses() {
-		List<Class> Classs = ClassRepository.findAll();
+		List<Class> Classs = classRepository.findAll();
 		return ResponseEntity.ok(Classs);
 	}
 	
@@ -44,18 +45,18 @@ public class ClassAdminController {
 	public ResponseEntity<?> updateClass(@Valid @RequestBody UpdateClassRequest updateClassRequest) {
 		System.out.println("Request : " + updateClassRequest.toString());
 		Optional<Class> targetClass = null;
-		if(!ClassRepository.existsById(updateClassRequest.getId())) {
+		if(!classRepository.existsById(updateClassRequest.getId())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: No Class with that name"));
 		}
 		else {
-			targetClass = ClassRepository.findById(updateClassRequest.getId());
+			targetClass = classRepository.findById(updateClassRequest.getId());
 		}
 		
 		targetClass.ifPresent(Class -> {
 			if(!isEmpty(updateClassRequest.getName())) Class.setName(updateClassRequest.getName());
-			ClassRepository.save(Class);
+			classRepository.save(Class);
 		});
 			
 		
@@ -68,9 +69,31 @@ public class ClassAdminController {
 		System.out.println("Request : " + createClassRequest.toString());
 
 		Class Class = new Class(createClassRequest.getName());
-		ClassRepository.save(Class);
+		classRepository.save(Class);
 
 		return ResponseEntity.ok(new MessageResponse("Class registered successfully!"));
+	}
+	
+	@PostMapping("/deleteClass")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> deleteClass(@Valid @RequestBody UpdateClassRequest updateClassRequest) {
+		System.out.println("Request : " + updateClassRequest.getId());
+		Optional<Class> targetClass = null;
+		if(!classRepository.existsById(updateClassRequest.getId())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: No user with that name"));
+		}
+		else {
+			targetClass = classRepository.findById(updateClassRequest.getId());
+		}
+		
+		targetClass.ifPresent(user -> {
+			classRepository.delete(user);
+		});
+			
+		
+		return ResponseEntity.ok(new MessageResponse("User successfully deleted!"));
 	}
 	
 	private boolean isEmpty(String test) {

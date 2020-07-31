@@ -137,6 +137,28 @@ export class ManageClassesComponent implements OnInit {
     );
   }
 
+  deleteUser() {
+    console.log('Deleting : ', this.targetClass);
+    this.classService.deleteClass(this.targetClass).subscribe(
+      data => {
+        console.log(data);
+        this.successMessage = data.message;
+        this.classService.getClasses().subscribe(
+          data => {
+            this.classList = data;
+            console.log('Class list : ', this.classList);
+          },
+          err => {
+            this.errorMessage = err.error.message;
+          }
+        );
+      },
+      err => {
+        this.errorMessage = err.error.message;
+      }
+    )
+  }
+
   reloadPage() {
     window.location.reload();
   }

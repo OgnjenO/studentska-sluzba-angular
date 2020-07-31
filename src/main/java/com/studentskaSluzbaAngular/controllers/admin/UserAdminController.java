@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -123,6 +124,28 @@ public class UserAdminController {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+	
+	@PostMapping("/deleteUser")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> deleteUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
+		System.out.println("Request : " + updateUserRequest.getId());
+		Optional<User> targetUser = null;
+		if(!userRepository.existsById(updateUserRequest.getId())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: No user with that name"));
+		}
+		else {
+			targetUser = userRepository.findById(updateUserRequest.getId());
+		}
+		
+		targetUser.ifPresent(user -> {
+			userRepository.delete(user);
+		});
+			
+		
+		return ResponseEntity.ok(new MessageResponse("User successfully deleted!"));
 	}
 	
 	private boolean isEmpty(int test) {

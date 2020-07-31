@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 const USER_API_URL = 'http://localhost:8080/api/admin/user/';
@@ -41,6 +41,12 @@ export class UserService {
       grade: user.grade,
       password: user.password,
       role: user.role
+    }, httpOptions);
+  }
+
+  deleteUser(user): Observable<any> {
+    return this.http.post(USER_API_URL + 'deleteUser', {
+      id: user.id,
     }, httpOptions);
   }
 }

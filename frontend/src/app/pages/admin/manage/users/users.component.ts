@@ -134,6 +134,28 @@ export class ManageUsersComponent implements OnInit {
     );
   }
 
+  deleteUser() {
+    console.log('Deleting : ', this.targetUser);
+    this.userService.deleteUser(this.targetUser).subscribe(
+      data => {
+        console.log(data);
+        this.successMessage = data.message;
+        this.userService.getUsers().subscribe(
+          data => {
+            this.userList = data;
+            console.log('User list : ', this.userList);
+          },
+          err => {
+            this.errorMessage = err.error.message;
+          }
+        );
+      },
+      err => {
+        this.errorMessage = err.error.message;
+      }
+    )
+  }
+
   reloadPage() {
     window.location.reload();
   }

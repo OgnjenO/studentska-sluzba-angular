@@ -31,4 +31,10 @@ export class ClassService {
       name: cls.name
     }, httpOptions);
   }
+
+  deleteClass(cls): Observable<any> {
+    return this.http.post(CLASS_API_URL + 'deleteClass', {
+      id: cls.id,
+    }, httpOptions);
+  }
 }
