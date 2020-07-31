@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const API_URL = 'http://localhost:8080/api/admin/';
+const USER_API_URL = 'http://localhost:8080/api/admin/user/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -11,16 +11,16 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class AdminService {
+export class UserService {
 
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<any> {
-    return this.http.get(API_URL + 'getUsers');
+    return this.http.get(USER_API_URL + 'getUsers');
   }
 
   updateUser(user): Observable<any> {
-    return this.http.post(API_URL + 'updateUser', {
+    return this.http.post(USER_API_URL + 'updateUser', {
       id: user.id,
       username: user.username,
       email: user.email,
@@ -33,7 +33,7 @@ export class AdminService {
   }
 
   createUser(user): Observable<any> {
-    return this.http.post(API_URL + 'createUser', {
+    return this.http.post(USER_API_URL + 'createUser', {
       username: user.username,
       email: user.email,
       firstname: user.firstname,

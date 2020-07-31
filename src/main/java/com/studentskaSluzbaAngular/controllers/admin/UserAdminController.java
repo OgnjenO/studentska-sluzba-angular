@@ -1,4 +1,4 @@
-package com.studentskaSluzbaAngular.controllers;
+package com.studentskaSluzbaAngular.controllers.admin;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,8 +29,8 @@ import com.studentskaSluzbaAngular.repository.UserRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin")
-public class AdminController {
+@RequestMapping("/api/admin/user")
+public class UserAdminController {
 	@Autowired
 	UserRepository userRepository;
 

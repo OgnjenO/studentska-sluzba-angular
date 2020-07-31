@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../../_services/admin/user.service';
+import { ClassService } from '../../../../_services/admin/class.service';
 import { faEdit, faWindowClose, faPlusSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Role } from '../../../../_models/role';
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  selector: 'app-classes',
+  templateUrl: './classes.component.html',
+  styleUrls: ['./classes.component.css']
 })
-export class ManageUsersComponent implements OnInit {
+export class ManageClassesComponent implements OnInit {
 
-  constructor(private userService: UserService) { }
+  constructor(private classService: ClassService) { }
 
   editIcon = faEdit;
   closeIcon = faWindowClose;
@@ -19,9 +19,9 @@ export class ManageUsersComponent implements OnInit {
   errorMessage;
   successMessage;
 
-  userList;
+  classList;
   
-  targetUser = null;
+  targetClass = null;
 
   closeResult: string;
   form: any = {};
@@ -34,15 +34,16 @@ export class ManageUsersComponent implements OnInit {
       this.roles.push(Role[key]);
     }
     
-    this.userService.getUsers().subscribe(
+    this.classService.getClasses().subscribe(
       data => {
-        this.userList = data;
-        this.targetUser = this.userList[0];
-        console.log('User list : ', this.userList);
+        console.log('getClasses data : ', data);
+        this.classList = data;
+        this.targetClass = this.classList ? this.classList[0] : null;
+        console.log('Class list : ', this.classList);
       },
       err => {
         this.errorMessage = err.error.message;
-        console.log('User list error : ', err);
+        console.log('Class list error : ', err);
       }
     );
   }
@@ -50,18 +51,18 @@ export class ManageUsersComponent implements OnInit {
   openModal(target) {
     this.newlyOpen = true;
     console.log(target);
-    this.targetUser = this.userList[target];
+    this.targetClass = this.classList[target];
     this.form = {};
-    this.form.id = this.targetUser.id;
-    console.log('TargetUser : ', this.targetUser);
+    this.form.id = this.targetClass.id;
+    console.log('targetClass : ', this.targetClass);
     console.log('Form : ', this.form);
   }
 
-  openModalNewUser() {
+  openModalNewClass() {
     this.newlyOpen = true;
-    this.targetUser = {
+    this.targetClass = {
       id: null,
-      username: 'username',
+      Classname: 'Classname',
       email: 'email@domain.com',
       firstname: 'John',
       lastname: 'Doe',
@@ -71,8 +72,8 @@ export class ManageUsersComponent implements OnInit {
       role: 'ROLE_ADMIN'
     };
     this.form = {};
-    this.form.id = this.targetUser.id;
-    console.log('TargetUser : ', this.targetUser);
+    this.form.id = this.targetClass.id;
+    console.log('targetClass : ', this.targetClass);
     console.log('Form : ', this.form);
   }
 
@@ -83,24 +84,24 @@ export class ManageUsersComponent implements OnInit {
 
   onSaveModal() {
     console.log(this.form);
-    this.form.id = this.targetUser.id;
-    if(!this.targetUser.id) {
-      this.createUser();
+    this.form.id = this.targetClass.id;
+    if(!this.targetClass.id) {
+      this.createClass();
     }
     else {
-      this.updateUser();
+      this.updateClass();
     }
   }
 
-  updateUser() {
-    this.userService.updateUser(this.form).subscribe(
+  updateClass() {
+    this.classService.updateClass(this.form).subscribe(
       data => {
         console.log(data);
         this.successMessage = data.message;
-        this.userService.getUsers().subscribe(
+        this.classService.getClasses().subscribe(
           data => {
-            this.userList = data;
-            console.log('User list : ', this.userList);
+            this.classList = data;
+            console.log('Class list : ', this.classList);
           },
           err => {
             this.errorMessage = err.error.message;
@@ -113,15 +114,17 @@ export class ManageUsersComponent implements OnInit {
     );
   }
 
-  createUser() {
-    this.userService.createUser(this.form).subscribe(
+  createClass() {
+    console.log(this.form);
+    console.log(this.classService);
+    this.classService.createClass(this.form).subscribe(
       data => {
         console.log(data);
         this.successMessage = data.message;
-        this.userService.getUsers().subscribe(
+        this.classService.getClasses().subscribe(
           data => {
-            this.userList = data;
-            console.log('User list : ', this.userList);
+            this.classList = data;
+            console.log('Class list : ', this.classList);
           },
           err => {
             this.errorMessage = err.error.message;

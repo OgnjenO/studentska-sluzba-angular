@@ -21,8 +21,7 @@ public class Class {
 	public Class() {
 	}
 
-	public Class(Long id, String name) {
-		this.id = id;
+	public Class(String name) {
 		this.name = name;
 	}
 
@@ -38,7 +37,7 @@ public class Class {
 		return name;
 	}
 
-	public void setUsername(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 }

@@ -4,7 +4,7 @@
     List of all users
     </h3>
     <div class="alert alert-success" role="alert" *ngIf="successMessage">
-    {{successMessage}}
+    {{successMessagetest}}
     </div>
     <div class="alert alert-success" role="alert" *ngIf="errorMessage">
     {{errorMessage}}
@@ -31,7 +31,7 @@
         <th><span *ngFor="let role of user.roles">{{role.name}} </span></th>
         <th>
           <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#modalWindow" (click)="openModal(i)"><fa-icon [icon]="editIcon"></fa-icon></button>
-          <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#modalWindow" (click)="openModal(i)"><fa-icon [icon]="editIcon"></fa-icon></button>
+          <button type="button" class="btn btn-danger mr-3" data-toggle="modal" data-target="#modalWindow" (click)="openModal(i)"><fa-icon [icon]="closeIcon"></fa-icon></button>
         </th>
       </tr>
     </tbody>
@@ -217,10 +217,6 @@
 								<div class="alert-danger" *ngIf="role.invalid">
 									<div *ngIf="role.errors.required">Role is required</div>
 								</div>
-							</div>
-
-							<div class="alert alert-warning" *ngIf="isSignUpFailed">
-								Signup failed!<br />{{ errorMessage }}
 							</div>
 					</div>
 					<div class="modal-footer">
