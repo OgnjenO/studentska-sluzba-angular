@@ -25,15 +25,10 @@ export class ManageClassesComponent implements OnInit {
 
   closeResult: string;
   form: any = {};
-  roles = [];
 
   newlyOpen = true;
 
   ngOnInit() {
-    for(let key in Role) {
-      this.roles.push(Role[key]);
-    }
-    
     this.classService.getClasses().subscribe(
       data => {
         console.log('getClasses data : ', data);

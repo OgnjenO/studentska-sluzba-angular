@@ -17,6 +17,7 @@
         <th scope="col">#</th>
         <th scope="col">id</th>
         <th scope="col">Name</th>
+        <th scope="col">Professors</th>
         <th scope="col">Actions</th>
       </tr>
     </thead>
@@ -25,6 +26,7 @@
         <th scope="row">{{i}}</th>
         <th scope="row">{{class.id}}</th>
         <th>{{class.name}}</th>
+        <th><span *ngFor="let prof of class.users; index as j"><span *ngIf="j>0">,&nbsp;</span>{{prof.firstname}} {{prof.lastname}}</span></th>
         <th>
           <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#modalWindow" (click)="openModal(i)"><fa-icon [icon]="editIcon"></fa-icon></button>
           <button type="button" class="btn btn-danger mr-3" data-toggle="modal" data-target="#modalWindowDelete" (click)="openModal(i)"><fa-icon [icon]="closeIcon"></fa-icon></button>
