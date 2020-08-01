@@ -10,9 +10,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(	name = "users", 
 		uniqueConstraints = { 
+			@UniqueConstraint(columnNames = "id"),
 			@UniqueConstraint(columnNames = "username"),
 			@UniqueConstraint(columnNames = "email") 
 		})
@@ -54,6 +58,14 @@ public class User {
 				inverseJoinColumns = @JoinColumn(name = "role_id"))
 	
 	private Set<Role> roles = new HashSet<>();
+
+	@ManyToMany()
+	@JoinTable(	name = "class_users", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "class_id"))
+	@JsonManagedReference
+	
+	private Set<Class> classes = new HashSet<>();
 
 	public User() {
 	}
@@ -138,5 +150,13 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public Set<Class> getClasses() {
+		return classes;
+	}
+
+	public void setClasses(Set<Class> classes) {
+		this.classes = classes;
 	}
 }

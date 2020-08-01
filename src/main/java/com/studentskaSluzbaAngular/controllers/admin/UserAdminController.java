@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.studentskaSluzbaAngular.models.ERole;
 import com.studentskaSluzbaAngular.models.Role;
 import com.studentskaSluzbaAngular.models.User;
+import com.studentskaSluzbaAngular.models.Class;
 import com.studentskaSluzbaAngular.payload.request.SignupRequest;
 import com.studentskaSluzbaAngular.payload.request.UpdateUserRequest;
 import com.studentskaSluzbaAngular.payload.response.MessageResponse;
+import com.studentskaSluzbaAngular.repository.ClassRepository;
 import com.studentskaSluzbaAngular.repository.RoleRepository;
 import com.studentskaSluzbaAngular.repository.UserRepository;
 
@@ -38,6 +40,9 @@ public class UserAdminController {
 	RoleRepository roleRepository;
 
 	@Autowired
+	ClassRepository classRepository;
+
+	@Autowired
 	PasswordEncoder encoder;
 	
 	@GetMapping("/getUsers")
@@ -48,6 +53,23 @@ public class UserAdminController {
 			user.setPassword("");
 		}
 		return ResponseEntity.ok(users);
+	}
+	
+	@PostMapping("/getUser")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> getUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
+		Optional<User> targetUser = null;
+		
+		if(!userRepository.existsById(updateUserRequest.getId())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: No user with that name"));
+		}
+		else {
+			targetUser = userRepository.findById(updateUserRequest.getId());
+		}
+		
+		return ResponseEntity.ok(targetUser.get());
 	}
 	
 	@PostMapping("/updateUser")
@@ -74,10 +96,21 @@ public class UserAdminController {
 			if(!isEmpty(updateUserRequest.getPassword())) user.setPassword(encoder.encode(updateUserRequest.getPassword()));
 			if(!isEmpty(updateUserRequest.getRole())) {
 				Set<Role> roles = new HashSet<>();
-				Optional<Role> curRole = roleRepository.findByName(ERole.valueOf(updateUserRequest.getRole()));
-				curRole.ifPresent(role -> {
+				Optional<Role> tarRole = roleRepository.findByName(ERole.valueOf(updateUserRequest.getRole()));
+				tarRole.ifPresent(role -> {
 					roles.add(role);
 					user.setRoles(roles);
+				});
+			}
+			if(!isEmpty(updateUserRequest.getClasss())) {
+				boolean shouldAdd = updateUserRequest.getClasss()>0;
+				Long tarId = Math.abs(updateUserRequest.getClasss());
+				Set<Class> classes = user.getClasses();
+				Optional<Class> tarClass = classRepository.findById(tarId);
+				tarClass.ifPresent(cls -> {
+					if(shouldAdd) classes.add(cls);
+					else classes.remove(cls);
+					user.setClasses(classes);
 				});
 			}
 			userRepository.save(user);
@@ -145,6 +178,11 @@ public class UserAdminController {
 			
 		
 		return ResponseEntity.ok(new MessageResponse("User successfully deleted!"));
+	}
+	
+	private boolean isEmpty(Long test) {
+		if(test == null || test == 0) return true;
+		else return false;
 	}
 	
 	private boolean isEmpty(int test) {

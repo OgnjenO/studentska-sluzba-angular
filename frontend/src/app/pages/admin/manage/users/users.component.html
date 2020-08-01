@@ -20,7 +20,8 @@
         <th scope="col">Firstname</th>
         <th scope="col">Lastname</th>
         <th scope="col">Email</th>
-        <th scope="col">Roles</th>
+				<th scope="col">Roles</th>
+				<th scope="col">Classes</th>
         <th scope="col">Actions</th>
       </tr>
     </thead>
@@ -33,18 +34,22 @@
         <th>{{user.lastname}}</th>
         <th>{{user.email}}</th>
         <th><span *ngFor="let role of user.roles">{{role.name}} </span></th>
+				<th><button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#modalWindowManageClasses" (click)="openModal(i)"><fa-icon [icon]="listIcon"></fa-icon></button></th>
         <th>
           <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#modalWindow" (click)="openModal(i)"><fa-icon [icon]="editIcon"></fa-icon></button>
           <button type="button" class="btn btn-danger mr-3" data-toggle="modal" data-target="#modalWindowDelete" (click)="openModal(i)"><fa-icon [icon]="closeIcon"></fa-icon></button>
         </th>
       </tr>
     </tbody>
-  </table>
+	</table>
+	
+	<!-- Update/Create User Modal Window -->
   <div class="modal fade" id="modalWindow" tabindex="-1" role="dialog" aria-labelledby="modalWindowLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content" *ngIf="this.targetUser">
+      <div class="modal-content" *ngIf="this.newUser || (this.targetUser>=0 && this.userList[this.targetUser])">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalWindowLabel">{{targetUser.firstname}} {{targetUser.lastname}}</h5>
+          <h5 class="modal-title" id="modalWindowLabel" *ngIf="!this.newUser">Update user {{userList[this.targetUser].firstname}} {{userList[this.targetUser].lastname}}</h5>
+          <h5 class="modal-title" id="modalWindowLabel" *ngIf="this.newUser">Create user</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -63,10 +68,10 @@
 									class="form-control"
 									name="username"
 									[(ngModel)]="form.username"
-									placeholder={{this.targetUser.username}}
+									[placeholder]="this.newUser ? this.newUser.username : this.userList[this.targetUser].username"
 									minlength="3"
 									maxlength="20"
-									[required]="!this.targetUser.id"
+									[required]="this.newUser"
 									#username="ngModel"
 								/>
 								<div class="alert-danger" *ngIf="username.invalid">
@@ -86,9 +91,9 @@
 									class="form-control"
 									name="email"
 									[(ngModel)]="form.email"
-									placeholder={{targetUser.email}}
+									[placeholder]="this.newUser ? this.newUser.email : userList[this.targetUser].email"
 									email
-									[required]="!this.targetUser.id"
+									[required]="this.newUser"
 									#email="ngModel"
 								/>
 								<div class="alert-danger" *ngIf="email.invalid">
@@ -105,10 +110,10 @@
 									class="form-control"
 									name="firstname"
 									[(ngModel)]="form.firstname"
-									placeholder={{targetUser.firstname}}
+									[placeholder]="this.newUser ? this.newUser.firstname : userList[this.targetUser].firstname"
 									minlength="3"
 									maxlength="20"
-									[required]="!this.targetUser.id"
+									[required]="this.newUser"
 									#firstname="ngModel"
 								/>
 								<div class="alert-danger" *ngIf="firstname.invalid">
@@ -128,10 +133,10 @@
 									class="form-control"
 									name="lastname"
 									[(ngModel)]="form.lastname"
-									placeholder={{targetUser.lastname}}
+									[placeholder]="this.newUser ? this.newUser.lastname : userList[this.targetUser].lastname"
 									minlength="3"
 									maxlength="20"
-									[required]="!this.targetUser.id"
+									[required]="this.newUser"
 									#lastname="ngModel"
 								/>
 								<div class="alert-danger" *ngIf="lastname.invalid">
@@ -151,10 +156,10 @@
 									class="form-control"
 									name="grade"
 									[(ngModel)]="form.grade"
-									placeholder={{targetUser.grade}}
+									[placeholder]="this.newUser ? this.newUser.grade : userList[this.targetUser].grade"
 									min="1"
 									max="10"
-									[required]="!this.targetUser.id"
+									[required]="this.newUser"
 									#grade="ngModel"
 								/>
 								<div class="alert-danger" *ngIf="grade.invalid">
@@ -174,10 +179,10 @@
 									class="form-control"
 									name="year"
 									[(ngModel)]="form.year"
-									placeholder={{targetUser.year}}
+									[placeholder]="this.newUser ? this.newUser.year : userList[this.targetUser].year"
 									min="1"
 									max="10"
-									[required]="!this.targetUser.id"
+									[required]="this.newUser"
 									#year="ngModel"
 								/>
 								<div class="alert-danger" *ngIf="year.invalid">
@@ -197,8 +202,9 @@
 									class="form-control"
 									name="password"
 									[(ngModel)]="form.password"
+									[placeholder]="this.newUser ? '*****' : ''"
 									minlength="6"
-									[required]="!this.targetUser.id"
+									[required]="this.newUser"
 									#password="ngModel"
 								/>
 								<div class="alert-danger" *ngIf="password.invalid">
@@ -213,7 +219,7 @@
 								<select
 									name="role"
 									[(ngModel)]="form.role"
-									[required]="!this.targetUser.id"
+									[required]="this.newUser"
 									#role="ngModel"
 								>
 									<option *ngFor="let role of roles; let i = index">{{role}}</option>
@@ -231,21 +237,76 @@
       </div>
     </div>
 	</div>
+
+	<!-- Delete User Confirm Modal Window -->
 	<div class="modal fade" id="modalWindowDelete" tabindex="-1" role="dialog" aria-labelledby="modalWindowLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content" *ngIf="this.targetUser">
+      <div class="modal-content" *ngIf="(this.targetUser>=0 && this.userList[this.targetUser])">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalWindowLabel">Delete {{targetUser.firstname}} {{targetUser.lastname}}</h5>
+          <h5 class="modal-title" id="modalWindowLabel">Delete {{userList[this.targetUser].firstname}} {{userList[this.targetUser].lastname}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
 				<div class="modal-body">
-					Are you sure you want to delete {{targetUser.firstname}} {{targetUser.lastname}}
+					Are you sure you want to delete {{userList[this.targetUser].firstname}} {{userList[this.targetUser].lastname}}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					<button type="submit" class="btn btn-danger" data-dismiss="modal" (click)="this.deleteUser()">Delete</button>
+				</div>
+      </div>
+    </div>
+	</div>
+	
+	<!-- Classes Manage Modal Window -->
+	<div class="modal fade" id="modalWindowManageClasses" tabindex="-1" role="dialog" aria-labelledby="modalWindowLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" *ngIf="(this.targetUser>=0 && this.userList[this.targetUser])">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalWindowLabel">Manage classes for {{userList[this.targetUser].firstname}} {{userList[this.targetUser].lastname}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+				<div class="modal-body">
+					<div class="pb-2">
+						<div class="row">
+							<div class="col-10">
+								<select class="h-100 w-100" [(ngModel)]="this.form.class">
+									<option disabled selected value>Select class to add</option>
+									<option *ngFor="let class of classList; let i = index" [value]="class.id">{{class.name}}</option>
+								</select>
+							</div>
+							<div class="col-2" *ngIf="this.form.class">
+								<button type="button" class="btn btn-success mr-3 float-right" (click)="onSaveModal()"><fa-icon [icon]="plusIcon"></fa-icon></button>
+							</div>
+						</div>
+					</div>
+					<table class="table" *ngIf="userList[this.targetUser].classes.length">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">id</th>
+								<th scope="col">Name</th>
+								<th scope="col">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let class of userList[this.targetUser].classes; index as i">
+								<th scope="row">{{i}}</th>
+								<th scope="row">{{class.id}}</th>
+								<th>{{class.name}}</th>
+								<th><button type="button" class="btn btn-danger mr-3" (click)="deleteClass(class.id)"><fa-icon *ngIf="!shouldConfirmDelete" [icon]="closeIcon"></fa-icon><span *ngIf="shouldConfirmDelete">Confirm</span></button></th>
+							</tr>
+						</tbody>
+					</table>
+					<div class="alert alert-danger" role="alert" *ngIf="!userList[this.targetUser].classes.length">
+						This user has no classes assigned to them
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				</div>
       </div>
     </div>

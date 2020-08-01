@@ -7,6 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(	name = "classes", 
 		uniqueConstraints = { 
@@ -21,10 +24,8 @@ public class Class {
 	@Size(max = 50)
 	private String name;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(	name = "class_users", 
-				joinColumns = @JoinColumn(name = "class_id"), 
-				inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@ManyToMany(mappedBy = "classes")
+	@JsonBackReference
 	
 	private Set<User> users = new HashSet<>();
 

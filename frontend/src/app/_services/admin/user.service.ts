@@ -19,6 +19,12 @@ export class UserService {
     return this.http.get(USER_API_URL + 'getUsers');
   }
 
+  getUser(userID): Observable<any> {
+    return this.http.post(USER_API_URL + 'getUser', {
+      id: userID
+    }, httpOptions);
+  }
+
   updateUser(user): Observable<any> {
     return this.http.post(USER_API_URL + 'updateUser', {
       id: user.id,
@@ -28,7 +34,8 @@ export class UserService {
       lastname: user.lastname,
       grade: user.grade,
       password: user.password,
-      role: user.role
+      role: user.role,
+      classs: user.class
     }, httpOptions);
   }
 
@@ -44,9 +51,9 @@ export class UserService {
     }, httpOptions);
   }
 
-  deleteUser(user): Observable<any> {
+  deleteUser(userID): Observable<any> {
     return this.http.post(USER_API_URL + 'deleteUser', {
-      id: user.id,
+      id: userID,
     }, httpOptions);
   }
 }

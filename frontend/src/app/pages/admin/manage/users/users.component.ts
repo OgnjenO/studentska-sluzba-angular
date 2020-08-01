@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../../_services/admin/user.service';
-import { faEdit, faWindowClose, faPlusSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faWindowClose, faPlusSquare, faList } from '@fortawesome/free-solid-svg-icons';
 import { Role } from '../../../../_models/role';
+import { ClassService } from 'src/app/_services/admin/class.service';
 
 @Component({
   selector: 'app-users',
@@ -10,24 +11,29 @@ import { Role } from '../../../../_models/role';
 })
 export class ManageUsersComponent implements OnInit {
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private classService: ClassService) { }
 
   editIcon = faEdit;
   closeIcon = faWindowClose;
   plusIcon = faPlusSquare;
+  listIcon = faList;
 
   errorMessage;
   successMessage;
 
   userList;
+  classList;
   
-  targetUser = null;
+  targetUser = -1;
+  newUser = null;
 
   closeResult: string;
   form: any = {};
   roles = [];
 
   newlyOpen = true;
+
+  shouldConfirmDelete = false;
 
   ngOnInit() {
     for(let key in Role) {
@@ -36,6 +42,7 @@ export class ManageUsersComponent implements OnInit {
     
     this.userService.getUsers().subscribe(
       data => {
+        console.log('Data : ', data);
         this.userList = data;
         this.targetUser = this.userList[0];
         console.log('User list : ', this.userList);
@@ -45,21 +52,34 @@ export class ManageUsersComponent implements OnInit {
         console.log('User list error : ', err);
       }
     );
+
+    this.classService.getClasses().subscribe(
+      data => {
+        console.log('Data : ', data);
+        this.classList = data;
+        console.log('Class list : ', this.userList);
+      },
+      err => {
+        this.errorMessage = err.error.message;
+        console.log('Class list error : ', err);
+      }
+    );
   }
 
   openModal(target) {
+    this.newUser = null;
     this.newlyOpen = true;
     console.log(target);
-    this.targetUser = this.userList[target];
+    this.targetUser = target;
     this.form = {};
-    this.form.id = this.targetUser.id;
-    console.log('TargetUser : ', this.targetUser);
+    this.form.id = this.userList[target].id;
+    console.log('TargetUser : ', this.userList[target]);
     console.log('Form : ', this.form);
   }
 
   openModalNewUser() {
     this.newlyOpen = true;
-    this.targetUser = {
+    this.newUser = {
       id: null,
       username: 'username',
       email: 'email@domain.com',
@@ -71,8 +91,8 @@ export class ManageUsersComponent implements OnInit {
       role: 'ROLE_ADMIN'
     };
     this.form = {};
-    this.form.id = this.targetUser.id;
-    console.log('TargetUser : ', this.targetUser);
+    this.form.id = this.newUser.id;
+    console.log('Newuser : ', this.newUser);
     console.log('Form : ', this.form);
   }
 
@@ -82,12 +102,12 @@ export class ManageUsersComponent implements OnInit {
   }
 
   onSaveModal() {
-    console.log(this.form);
-    this.form.id = this.targetUser.id;
-    if(!this.targetUser.id) {
+    console.log('Save modal : ', this.form);
+    if(this.newUser) {
       this.createUser();
     }
     else {
+      this.form.id = this.userList[this.targetUser].id;
       this.updateUser();
     }
   }
@@ -97,9 +117,9 @@ export class ManageUsersComponent implements OnInit {
       data => {
         console.log(data);
         this.successMessage = data.message;
-        this.userService.getUsers().subscribe(
+        this.userService.getUser(this.form.id).subscribe(
           data => {
-            this.userList = data;
+            this.userList[this.targetUser] = data;
             console.log('User list : ', this.userList);
           },
           err => {
@@ -154,6 +174,35 @@ export class ManageUsersComponent implements OnInit {
         this.errorMessage = err.error.message;
       }
     )
+  }
+
+  deleteClass(classid) {
+    if(this.shouldConfirmDelete) {
+      this.form.class = -classid;
+      console.log('Should delete : ', classid, this.form);
+      this.userService.updateUser(this.form).subscribe(
+        data => {
+          console.log(data);
+          this.successMessage = data.message;
+          this.userService.getUser(this.form.id).subscribe(
+            data => {
+              this.shouldConfirmDelete = false;
+              this.userList[this.targetUser] = data;
+              console.log('User list : ', this.userList);
+            },
+            err => {
+              this.errorMessage = err.error.message;
+            }
+          );
+        },
+        err => {
+          this.errorMessage = err.error.message;
+        }
+      );
+    }
+    else {
+      this.shouldConfirmDelete = true;
+    }
   }
 
   reloadPage() {

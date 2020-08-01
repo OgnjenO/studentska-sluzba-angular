@@ -24,6 +24,8 @@ public class UpdateUserRequest {
 	private int grade;
 	
 	private String role;
+	
+	private Long classs;
 
 	@Size(max = 120)
 	private String password;
@@ -90,6 +92,15 @@ public class UpdateUserRequest {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+	
+
+	public Long getClasss() {
+		return classs;
+	}
+
+	public void setClasss(Long classs) {
+		this.classs = classs;
 	}
 
 	public String getPassword() {
