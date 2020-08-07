@@ -5,9 +5,6 @@
       <li class="nav-item">
         <a href="/home" class="nav-link" routerLink="home">Home </a>
       </li>
-      <li class="nav-item" *ngIf="showAdminPanel">
-        <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
-      </li>
       <li class="nav-item dropdown" *ngIf="showAdminPanel">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Admin Panel
@@ -15,7 +12,6 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="/admin/users">Users</a>
           <a class="dropdown-item" href="/admin/classes">Classes</a>
-          <a class="dropdown-item" href="/admin/classusers">Class users</a>
         </div>
       </li>
     </ul>
