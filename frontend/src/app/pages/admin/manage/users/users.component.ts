@@ -155,8 +155,8 @@ export class ManageUsersComponent implements OnInit {
   }
 
   deleteUser() {
-    console.log('Deleting : ', this.targetUser);
-    this.userService.deleteUser(this.targetUser).subscribe(
+    console.log('Deleting : ', this.userList[this.targetUser].id);
+    this.userService.deleteUser(this.userList[this.targetUser].id).subscribe(
       data => {
         console.log(data);
         this.successMessage = data.message;
