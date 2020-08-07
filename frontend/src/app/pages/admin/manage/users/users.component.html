@@ -297,7 +297,9 @@
 								<th scope="row">{{i}}</th>
 								<th scope="row">{{class.id}}</th>
 								<th>{{class.name}}</th>
-								<th><button type="button" class="btn btn-danger mr-3" (click)="deleteClass(class.id)"><fa-icon *ngIf="!shouldConfirmDelete" [icon]="closeIcon"></fa-icon><span *ngIf="shouldConfirmDelete">Confirm</span></button></th>
+								<th>
+									<button type="button" class="btn btn-danger mr-3" (click)="deleteClass(class.id)"><fa-icon *ngIf="shouldConfirmDelete !== class.id" [icon]="closeIcon"></fa-icon><span *ngIf="shouldConfirmDelete === class.id">Confirm</span></button>
+								</th>
 							</tr>
 						</tbody>
 					</table>

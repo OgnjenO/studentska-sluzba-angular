@@ -33,7 +33,7 @@ export class ManageUsersComponent implements OnInit {
 
   newlyOpen = true;
 
-  shouldConfirmDelete = false;
+  shouldConfirmDelete = -1;
 
   ngOnInit() {
     for(let key in Role) {
@@ -177,7 +177,7 @@ export class ManageUsersComponent implements OnInit {
   }
 
   deleteClass(classid) {
-    if(this.shouldConfirmDelete) {
+    if(this.shouldConfirmDelete === classid) {
       this.form.class = -classid;
       console.log('Should delete : ', classid, this.form);
       this.userService.updateUser(this.form).subscribe(
@@ -186,7 +186,7 @@ export class ManageUsersComponent implements OnInit {
           this.successMessage = data.message;
           this.userService.getUser(this.form.id).subscribe(
             data => {
-              this.shouldConfirmDelete = false;
+              this.shouldConfirmDelete = -1;
               this.userList[this.targetUser] = data;
               console.log('User list : ', this.userList);
             },
@@ -201,7 +201,7 @@ export class ManageUsersComponent implements OnInit {
       );
     }
     else {
-      this.shouldConfirmDelete = true;
+      this.shouldConfirmDelete = classid;
     }
   }
 
