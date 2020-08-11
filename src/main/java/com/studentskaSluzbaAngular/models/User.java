@@ -59,7 +59,7 @@ public class User {
 	
 	private Set<Role> roles = new HashSet<>();
 
-	@ManyToMany()
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(	name = "class_users", 
 				joinColumns = @JoinColumn(name = "user_id"), 
 				inverseJoinColumns = @JoinColumn(name = "class_id"))

@@ -1,6 +1,10 @@
 package com.studentskaSluzbaAngular.payload.response;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import com.studentskaSluzbaAngular.models.Class;
 
 public class JwtResponse {
 	private String token;
@@ -8,13 +12,25 @@ public class JwtResponse {
 	private Long id;
 	private String username;
 	private String email;
+	private String firstname;
+	private String lastname;
+	private int year;
+	private int grade;
+	private Set<Class> classes = new HashSet<>();
 	private List<String> roles;
 
-	public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles) {
+	public JwtResponse(String accessToken, Long id, String username, String email,
+			String firstname, String lastname, int year, int grade, Set<Class> classes,
+			List<String> roles) {
 		this.token = accessToken;
 		this.id = id;
 		this.username = username;
 		this.email = email;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.year = year;
+		this.grade = grade;
+		this.classes = classes;
 		this.roles = roles;
 	}
 
@@ -60,5 +76,25 @@ public class JwtResponse {
 
 	public List<String> getRoles() {
 		return roles;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public int getGrade() {
+		return grade;
+	}
+
+	public Set<Class> getClasses() {
+		return classes;
 	}
 }
