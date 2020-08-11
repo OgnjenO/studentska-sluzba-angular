@@ -10,6 +10,7 @@ export class AppComponent implements OnInit {
   private roles: string[];
   isLoggedIn = false;
   showAdminPanel = false;
+  showStudentPanel = false;
   username: string;
 
   constructor(private tokenStorageService: TokenStorageService) { }
@@ -22,6 +23,7 @@ export class AppComponent implements OnInit {
       this.roles = user.roles;
 
       this.showAdminPanel = this.roles.includes('ROLE_ADMIN');
+      this.showStudentPanel = this.roles.includes('ROLE_STUDENT');
 
       this.username = user.username;
     }

@@ -18,6 +18,7 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { AdminMainComponent } from './pages/admin/main/main.component';
 import { ManageUsersComponent } from './pages/admin/manage/users/users.component';
 import { ManageClassesComponent } from './pages/admin/manage/classes/classes.component';
+import { ClassSignupComponent } from './pages/user/classes/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ManageClassesComponent } from './pages/admin/manage/classes/classes.com
     ProfileComponent,
     AdminMainComponent,
     ManageUsersComponent,
-    ManageClassesComponent
+    ManageClassesComponent,
+    ClassSignupComponent
   ],
   imports: [
     BrowserModule,
