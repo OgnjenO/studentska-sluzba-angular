@@ -14,37 +14,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.studentskaSluzbaAngular.models.Role;
 import com.studentskaSluzbaAngular.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.studentskaSluzbaAngular.models.Class;
+import com.studentskaSluzbaAngular.models.Subject;
 
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private final Long id;
 
-	private String username;
+	private final String username;
 
-	private String email;
-	
-	private String firstname;
-	
-	private String lastname;
-	
-	private int year;
-	
-	private int grade;
-	
+	private final String email;
+
+	private final String firstname;
+
+	private final String lastname;
+
+	private final int year;
+
+	private final int grade;
+
 	private Set<Role> roles = new HashSet<>();
-	
-	private Set<Class> classes = new HashSet<>();
+
+	private Set<Subject> subjects = new HashSet<>();
 
 	@JsonIgnore
-	private String password;
+	private final String password;
 
-	private Collection<? extends GrantedAuthority> authorities;
+	private final Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(Long id, String username, String email, String firstname,
-			String lastname, int year, int grade,
-			Set<Role> roles, Set<Class> classes, String password,
+	public UserDetailsImpl(Long id, String username, String email, String firstname, String lastname, int year,
+			int grade, Set<Role> roles, Set<Subject> subjects, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
@@ -54,29 +53,19 @@ public class UserDetailsImpl implements UserDetails {
 		this.year = year;
 		this.grade = grade;
 		this.roles = roles;
-		this.classes = classes;
+		this.subjects = subjects;
 		this.password = password;
 		this.authorities = authorities;
 	}
 
 	public static UserDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
-				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
-				.collect(Collectors.toList());
-		System.out.println(user.getClasses().toString());
+				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
+		System.out.println(user.getSubjects().toString());
 
-		return new UserDetailsImpl(
-				user.getId(), 
-				user.getUsername(), 
-				user.getEmail(),
-				user.getFirstname(),
-				user.getLastname(),
-				user.getYear(),
-				user.getGrade(),
-				user.getRoles(),
-				user.getClasses(),
-				user.getPassword(), 
-				authorities);
+		return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getFirstname(),
+				user.getLastname(), user.getYear(), user.getGrade(), user.getRoles(), user.getSubjects(),
+				user.getPassword(), authorities);
 	}
 
 	@Override
@@ -112,8 +101,8 @@ public class UserDetailsImpl implements UserDetails {
 		return roles;
 	}
 
-	public Set<Class> getClasses() {
-		return classes;
+	public Set<Subject> getSubjects() {
+		return subjects;
 	}
 
 	@Override

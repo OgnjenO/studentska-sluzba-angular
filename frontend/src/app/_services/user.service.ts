@@ -21,11 +21,12 @@ export class UserService {
   }
 
   updateSelf(data): Observable<any> {
+    console.log('Update self data : ', data);
     return this.http.post(USER_API_URL + 'updateSelf', {
       id: data.id,
       email: data.email,
       password: data.password,
-      classs: data.class
+      subject: data.subject
     }, httpOptions);
   }
 

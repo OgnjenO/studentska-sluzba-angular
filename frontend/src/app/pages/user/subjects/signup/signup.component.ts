@@ -9,9 +9,9 @@ import { UserService } from '../../../../_services/user.service'
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class ClassSignupComponent implements OnInit {
+export class SubjectSignupComponent implements OnInit {
   currentUser: any;
-  classList: any;
+  subjectList: any;
   form: any = {};
 
   plusIcon = faPlusSquare;
@@ -24,29 +24,30 @@ export class ClassSignupComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this.token.getUser();
     console.log('Current user : ', this.token.getUser());
-    this.globalService.getClasses().subscribe(
+    this.globalService.getSubjects().subscribe(
       data => {
-        this.classList = data;
-        console.log('getClasses data : ', this.classList);
+        this.subjectList = data;
+        console.log('getSubjects data : ', this.subjectList);
       },
       err => {
-        console.log('Class list error : ', err);
+        console.log('Subject list error : ', err);
       }
     );
   }
 
-  updateClass() {
+  updateSubject() {
     this.form.id = this.currentUser.id;
-    console.log('Adding class : ', this.form); 
+    console.log('Adding subject : ', this.form); 
     this.userService.updateSelf(this.form).subscribe(
       data => {
         console.log(data);
         console.log('Updated self : ', data);
+        this.shouldConfirmDelete = -1;
         this.userService.getCurrentUser().subscribe(
           data => {
             console.log('Data : ', data);
             console.log('Current : ', this.currentUser);
-            this.currentUser.classes = data.classes;
+            this.currentUser.subjects = data.subjects;
             this.tokenStorage.saveUser(this.currentUser);
           },
           err => {
@@ -62,13 +63,14 @@ export class ClassSignupComponent implements OnInit {
     this.clearForm();
   }
 
-  deleteClass(classid) {
-    if(this.shouldConfirmDelete === classid) {
-      this.form.class = -classid;
-      this.updateClass();
+  deleteSubject(subjectid) {
+    if(this.shouldConfirmDelete === subjectid) {
+      this.form.subject = -subjectid;
+      console.log('Deleting subject : ', this.form);
+      this.updateSubject();
     }
     else {
-      this.shouldConfirmDelete = classid;
+      this.shouldConfirmDelete = subjectid;
     }
   }
 

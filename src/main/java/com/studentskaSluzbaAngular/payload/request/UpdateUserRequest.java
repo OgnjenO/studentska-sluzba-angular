@@ -25,7 +25,7 @@ public class UpdateUserRequest {
 	
 	private String role;
 	
-	private Long classs;
+	private Long subject;
 
 	@Size(max = 120)
 	private String password;
@@ -95,12 +95,12 @@ public class UpdateUserRequest {
 	}
 	
 
-	public Long getClasss() {
-		return classs;
+	public Long getSubject() {
+		return subject;
 	}
 
-	public void setClasss(Long classs) {
-		this.classs = classs;
+	public void setSubject(Long subject) {
+		this.subject = subject;
 	}
 
 	public String getPassword() {
@@ -113,8 +113,17 @@ public class UpdateUserRequest {
 
 	@Override
 	public String toString() {
-		return "UpdateUserRequest [id=" + id + ", username=" + username + ", email=" + email + ", firstname="
-				+ firstname + ", lastname=" + lastname + ", year=" + year + ", grade=" + grade + ", role=" + role
-				+ ", password=" + password + "]";
-	}    
+		return "UpdateUserRequest{" +
+				"id=" + id +
+				", username='" + username + '\'' +
+				", email='" + email + '\'' +
+				", firstname='" + firstname + '\'' +
+				", lastname='" + lastname + '\'' +
+				", year=" + year +
+				", grade=" + grade +
+				", role='" + role + '\'' +
+				", subject=" + subject +
+				", password='" + password + '\'' +
+				'}';
+	}
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.studentskaSluzbaAngular.models.Grade;
 import com.studentskaSluzbaAngular.models.User;
-import com.studentskaSluzbaAngular.models.Class;
+import com.studentskaSluzbaAngular.models.Subject;
 
 @Repository
 public interface GradeRepository extends JpaRepository<Grade, Long> {
@@ -16,7 +16,7 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
 	
 	List<Grade> findByUser(User user);
 
-	List<Grade> findByClasss(Class classs);
+	List<Grade> findBySubject(Subject subject);
 	
 	boolean existsById(Long id);
 	

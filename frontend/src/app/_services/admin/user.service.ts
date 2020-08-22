@@ -35,7 +35,7 @@ export class UserService {
       grade: user.grade,
       password: user.password,
       role: user.role,
-      classs: user.class
+      subject: user.subject
     }, httpOptions);
   }
 

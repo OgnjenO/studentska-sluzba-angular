@@ -2,7 +2,7 @@ package com.studentskaSluzbaAngular.payload.request;
 
 import javax.validation.constraints.*;
  
-public class CreateClassRequest {
+public class CreateSubjectRequest {
 	private Long id;
 
 	private String name;
@@ -25,6 +25,6 @@ public class CreateClassRequest {
 
 	@Override
 	public String toString() {
-		return "UpdateClassRequest [id=" + id + ", name=" + name + "]";
+		return "UpdateSubjectRequest [id=" + id + ", name=" + name + "]";
 	}
 }

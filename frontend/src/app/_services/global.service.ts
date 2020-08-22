@@ -11,7 +11,7 @@ export class GlobalService {
 
   constructor(private http: HttpClient) { }
 
-  getClasses(): Observable<any> {
-    return this.http.get(GLOBAL_API_URL + 'classes/getClasses');
+  getSubjects(): Observable<any> {
+    return this.http.get(GLOBAL_API_URL + 'subjects/getSubjects');
   }
 }

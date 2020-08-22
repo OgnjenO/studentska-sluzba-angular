@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ClassService } from '../../../../_services/admin/class.service';
+import { SubjectService } from '../../../../_services/admin/subject.service';
 import { faEdit, faWindowClose, faPlusSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Role } from '../../../../_models/role';
 
 @Component({
-  selector: 'app-classes',
-  templateUrl: './classes.component.html',
-  styleUrls: ['./classes.component.css']
+  selector: 'app-subjects',
+  templateUrl: './subjects.component.html',
+  styleUrls: ['./subjects.component.css']
 })
-export class ManageClassesComponent implements OnInit {
+export class ManageSubjectsComponent implements OnInit {
 
-  constructor(private classService: ClassService) { }
+  constructor(private subjectService: SubjectService) { }
 
   editIcon = faEdit;
   closeIcon = faWindowClose;
@@ -19,9 +19,9 @@ export class ManageClassesComponent implements OnInit {
   errorMessage;
   successMessage;
 
-  classList;
+  subjectList;
   
-  targetClass = null;
+  targetSubject = null;
 
   closeResult: string;
   form: any = {};
@@ -29,16 +29,16 @@ export class ManageClassesComponent implements OnInit {
   newlyOpen = true;
 
   ngOnInit() {
-    this.classService.getClasses().subscribe(
+    this.subjectService.getSubjects().subscribe(
       data => {
-        console.log('getClasses data : ', data);
-        this.classList = data;
-        this.targetClass = this.classList ? this.classList[0] : null;
-        console.log('Class list : ', this.classList);
+        console.log('getSubjects data : ', data);
+        this.subjectList = data;
+        this.targetSubject = this.subjectList ? this.subjectList[0] : null;
+        console.log('Subject list : ', this.subjectList);
       },
       err => {
         this.errorMessage = err.error.message;
-        console.log('Class list error : ', err);
+        console.log('Subject list error : ', err);
       }
     );
   }
@@ -46,18 +46,18 @@ export class ManageClassesComponent implements OnInit {
   openModal(target) {
     this.newlyOpen = true;
     console.log(target);
-    this.targetClass = this.classList[target];
+    this.targetSubject = this.subjectList[target];
     this.form = {};
-    this.form.id = this.targetClass.id;
-    console.log('targetClass : ', this.targetClass);
+    this.form.id = this.targetSubject.id;
+    console.log('targetSubject : ', this.targetSubject);
     console.log('Form : ', this.form);
   }
 
-  openModalNewClass() {
+  openModalNewSubject() {
     this.newlyOpen = true;
-    this.targetClass = {
+    this.targetSubject = {
       id: null,
-      Classname: 'Classname',
+      Subjectname: 'Subjectname',
       email: 'email@domain.com',
       firstname: 'John',
       lastname: 'Doe',
@@ -67,8 +67,8 @@ export class ManageClassesComponent implements OnInit {
       role: 'ROLE_ADMIN'
     };
     this.form = {};
-    this.form.id = this.targetClass.id;
-    console.log('targetClass : ', this.targetClass);
+    this.form.id = this.targetSubject.id;
+    console.log('targetSubject : ', this.targetSubject);
     console.log('Form : ', this.form);
   }
 
@@ -79,24 +79,24 @@ export class ManageClassesComponent implements OnInit {
 
   onSaveModal() {
     console.log(this.form);
-    this.form.id = this.targetClass.id;
-    if(!this.targetClass.id) {
-      this.createClass();
+    this.form.id = this.targetSubject.id;
+    if(!this.targetSubject.id) {
+      this.createSubject();
     }
     else {
-      this.updateClass();
+      this.updateSubject();
     }
   }
 
-  updateClass() {
-    this.classService.updateClass(this.form).subscribe(
+  updateSubject() {
+    this.subjectService.updateSubject(this.form).subscribe(
       data => {
         console.log(data);
         this.successMessage = data.message;
-        this.classService.getClasses().subscribe(
+        this.subjectService.getSubjects().subscribe(
           data => {
-            this.classList = data;
-            console.log('Class list : ', this.classList);
+            this.subjectList = data;
+            console.log('Subject list : ', this.subjectList);
           },
           err => {
             this.errorMessage = err.error.message;
@@ -109,17 +109,17 @@ export class ManageClassesComponent implements OnInit {
     );
   }
 
-  createClass() {
+  createSubject() {
     console.log(this.form);
-    console.log(this.classService);
-    this.classService.createClass(this.form).subscribe(
+    console.log(this.subjectService);
+    this.subjectService.createSubject(this.form).subscribe(
       data => {
         console.log(data);
         this.successMessage = data.message;
-        this.classService.getClasses().subscribe(
+        this.subjectService.getSubjects().subscribe(
           data => {
-            this.classList = data;
-            console.log('Class list : ', this.classList);
+            this.subjectList = data;
+            console.log('Subject list : ', this.subjectList);
           },
           err => {
             this.errorMessage = err.error.message;
@@ -133,15 +133,15 @@ export class ManageClassesComponent implements OnInit {
   }
 
   deleteUser() {
-    console.log('Deleting : ', this.targetClass);
-    this.classService.deleteClass(this.targetClass).subscribe(
+    console.log('Deleting : ', this.targetSubject);
+    this.subjectService.deleteSubject(this.targetSubject).subscribe(
       data => {
         console.log(data);
         this.successMessage = data.message;
-        this.classService.getClasses().subscribe(
+        this.subjectService.getSubjects().subscribe(
           data => {
-            this.classList = data;
-            console.log('Class list : ', this.classList);
+            this.subjectList = data;
+            console.log('Subject list : ', this.subjectList);
           },
           err => {
             this.errorMessage = err.error.message;

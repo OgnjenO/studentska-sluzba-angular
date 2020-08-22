@@ -17,8 +17,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { AdminMainComponent } from './pages/admin/main/main.component';
 import { ManageUsersComponent } from './pages/admin/manage/users/users.component';
-import { ManageClassesComponent } from './pages/admin/manage/classes/classes.component';
-import { ClassSignupComponent } from './pages/user/classes/signup/signup.component';
+import { ManageSubjectsComponent } from './pages/admin/manage/subjects/subjects.component';
+import { SubjectSignupComponent } from './pages/user/subjects/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -30,8 +30,8 @@ import { ClassSignupComponent } from './pages/user/classes/signup/signup.compone
     ProfileComponent,
     AdminMainComponent,
     ManageUsersComponent,
-    ManageClassesComponent,
-    ClassSignupComponent
+    ManageSubjectsComponent,
+    SubjectSignupComponent
   ],
   imports: [
     BrowserModule,

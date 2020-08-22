@@ -60,12 +60,12 @@ public class User {
 	private Set<Role> roles = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(	name = "class_users", 
+	@JoinTable(	name = "subject_users",
 				joinColumns = @JoinColumn(name = "user_id"), 
-				inverseJoinColumns = @JoinColumn(name = "class_id"))
+				inverseJoinColumns = @JoinColumn(name = "subject_id"))
 	@JsonManagedReference
 	
-	private Set<Class> classes = new HashSet<>();
+	private Set<Subject> subjects = new HashSet<>();
 
 	public User() {
 	}
@@ -152,11 +152,11 @@ public class User {
 		this.roles = roles;
 	}
 
-	public Set<Class> getClasses() {
-		return classes;
+	public Set<Subject> getSubjects() {
+		return subjects;
 	}
 
-	public void setClasses(Set<Class> classes) {
-		this.classes = classes;
+	public void setSubjects(Set<Subject> subjects) {
+		this.subjects = subjects;
 	}
 }

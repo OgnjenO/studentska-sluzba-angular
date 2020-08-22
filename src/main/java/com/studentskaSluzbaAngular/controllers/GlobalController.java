@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.studentskaSluzbaAngular.models.Class;
-import com.studentskaSluzbaAngular.repository.ClassRepository;
+import com.studentskaSluzbaAngular.models.Subject;
+import com.studentskaSluzbaAngular.repository.SubjectRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/global")
 public class GlobalController {
 	@Autowired
-	ClassRepository classRepository;
+	SubjectRepository subjectRepository;
 	
-	@GetMapping("/classes/getClasses")
-	public ResponseEntity<?> getClasses() {
-		List<Class> Classs = classRepository.findAll();
-		return ResponseEntity.ok(Classs);
+	@GetMapping("/subjects/getSubjects")
+	public ResponseEntity<?> getSubjects() {
+		List<Subject> subjects = subjectRepository.findAll();
+		return ResponseEntity.ok(subjects);
 	}
 }

@@ -11,11 +11,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(	name = "classes", 
+@Table(	name = "subjects",
 		uniqueConstraints = { 
 			@UniqueConstraint(columnNames = "id")
 		})
-public class Class {
+public class Subject {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -24,15 +24,15 @@ public class Class {
 	@Size(max = 50)
 	private String name;
 
-	@ManyToMany(mappedBy = "classes")
+	@ManyToMany(mappedBy = "subjects")
 	@JsonBackReference
 	
 	private Set<User> users = new HashSet<>();
 
-	public Class() {
+	public Subject() {
 	}
 
-	public Class(String name) {
+	public Subject(String name) {
 		this.name = name;
 	}
 
@@ -58,5 +58,14 @@ public class Class {
 
 	public void setUsers(Set<User> users) {
 		this.users = users;
+	}
+
+	@Override
+	public String toString() {
+		return "Subject{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", users=" + users +
+				'}';
 	}
 }

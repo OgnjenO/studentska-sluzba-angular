@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../../_services/admin/user.service';
 import { faEdit, faWindowClose, faPlusSquare, faList } from '@fortawesome/free-solid-svg-icons';
 import { Role } from '../../../../_models/role';
-import { ClassService } from 'src/app/_services/admin/class.service';
+import { SubjectService } from 'src/app/_services/admin/subject.service';
 
 @Component({
   selector: 'app-users',
@@ -11,7 +11,7 @@ import { ClassService } from 'src/app/_services/admin/class.service';
 })
 export class ManageUsersComponent implements OnInit {
 
-  constructor(private userService: UserService, private classService: ClassService) { }
+  constructor(private userService: UserService, private subjectService: SubjectService) { }
 
   editIcon = faEdit;
   closeIcon = faWindowClose;
@@ -22,7 +22,7 @@ export class ManageUsersComponent implements OnInit {
   successMessage;
 
   userList;
-  classList;
+  subjectList;
   
   targetUser = -1;
   newUser = null;
@@ -53,15 +53,15 @@ export class ManageUsersComponent implements OnInit {
       }
     );
 
-    this.classService.getClasses().subscribe(
+    this.subjectService.getSubjects().subscribe(
       data => {
         console.log('Data : ', data);
-        this.classList = data;
-        console.log('Class list : ', this.userList);
+        this.subjectList = data;
+        console.log('Subject list : ', this.subjectList);
       },
       err => {
         this.errorMessage = err.error.message;
-        console.log('Class list error : ', err);
+        console.log('Subject list error : ', err);
       }
     );
   }
@@ -176,10 +176,10 @@ export class ManageUsersComponent implements OnInit {
     )
   }
 
-  deleteClass(classid) {
-    if(this.shouldConfirmDelete === classid) {
-      this.form.class = -classid;
-      console.log('Should delete : ', classid, this.form);
+  deleteSubject(subjectid) {
+    if(this.shouldConfirmDelete === subjectid) {
+      this.form.subject = -subjectid;
+      console.log('Should delete : ', subjectid, this.form);
       this.userService.updateUser(this.form).subscribe(
         data => {
           console.log(data);
@@ -201,7 +201,7 @@ export class ManageUsersComponent implements OnInit {
       );
     }
     else {
-      this.shouldConfirmDelete = classid;
+      this.shouldConfirmDelete = subjectid;
     }
   }
 

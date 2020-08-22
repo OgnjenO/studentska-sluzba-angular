@@ -34,7 +34,7 @@
         <th>{{user.lastname}}</th>
         <th>{{user.email}}</th>
         <th><span *ngFor="let role of user.roles">{{role.name}} </span></th>
-				<th><button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#modalWindowManageClasses" (click)="openModal(i)"><fa-icon [icon]="listIcon"></fa-icon></button></th>
+				<th><button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#modalWindowManageSubjects" (click)="openModal(i)"><fa-icon [icon]="listIcon"></fa-icon></button></th>
         <th>
           <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#modalWindow" (click)="openModal(i)"><fa-icon [icon]="editIcon"></fa-icon></button>
           <button type="button" class="btn btn-danger mr-3" data-toggle="modal" data-target="#modalWindowDelete" (click)="openModal(i)"><fa-icon [icon]="closeIcon"></fa-icon></button>
@@ -260,11 +260,11 @@
 	</div>
 	
 	<!-- Classes Manage Modal Window -->
-	<div class="modal fade" id="modalWindowManageClasses" tabindex="-1" role="dialog" aria-labelledby="modalWindowLabel" aria-hidden="true">
+	<div class="modal fade" id="modalWindowManageSubjects" tabindex="-1" role="dialog" aria-labelledby="modalWindowLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content" *ngIf="(this.targetUser>=0 && this.userList[this.targetUser])">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalWindowLabel">Manage classes for {{userList[this.targetUser].firstname}} {{userList[this.targetUser].lastname}}</h5>
+          <h5 class="modal-title" id="modalWindowLabel">Manage subjects for {{userList[this.targetUser].firstname}} {{userList[this.targetUser].lastname}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -273,17 +273,17 @@
 					<div class="pb-2">
 						<div class="row">
 							<div class="col-10">
-								<select class="h-100 w-100" [(ngModel)]="this.form.class">
-									<option disabled selected value>Select class to add</option>
-									<option *ngFor="let class of classList; let i = index" [value]="class.id">{{class.name}}</option>
+								<select class="h-100 w-100" [(ngModel)]="this.form.subject">
+									<option disabled selected value>Select subject to add</option>
+									<option *ngFor="let subject of subjectList; let i = index" [value]="subject.id">{{subject.name}}</option>
 								</select>
 							</div>
-							<div class="col-2" *ngIf="this.form.class">
+							<div class="col-2" *ngIf="this.form.subject">
 								<button type="button" class="btn btn-success mr-3 float-right" (click)="onSaveModal()"><fa-icon [icon]="plusIcon"></fa-icon></button>
 							</div>
 						</div>
 					</div>
-					<table class="table" *ngIf="userList[this.targetUser].classes.length">
+					<table class="table" *ngIf="userList[this.targetUser].subjects.length">
 						<thead class="thead-dark">
 							<tr>
 								<th scope="col">#</th>
@@ -293,18 +293,18 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngFor="let class of userList[this.targetUser].classes; index as i">
+							<tr *ngFor="let subject of userList[this.targetUser].subjects; index as i">
 								<th scope="row">{{i}}</th>
-								<th scope="row">{{class.id}}</th>
-								<th>{{class.name}}</th>
+								<th scope="row">{{subject.id}}</th>
+								<th>{{subject.name}}</th>
 								<th>
-									<button type="button" class="btn btn-danger mr-3" (click)="deleteClass(class.id)"><fa-icon *ngIf="shouldConfirmDelete !== class.id" [icon]="closeIcon"></fa-icon><span *ngIf="shouldConfirmDelete === class.id">Confirm</span></button>
+									<button type="button" class="btn btn-danger mr-3" (click)="deleteSubject(subject.id)"><fa-icon *ngIf="shouldConfirmDelete !== subject.id" [icon]="closeIcon"></fa-icon><span *ngIf="shouldConfirmDelete === subject.id">Confirm</span></button>
 								</th>
 							</tr>
 						</tbody>
 					</table>
-					<div class="alert alert-danger" role="alert" *ngIf="!userList[this.targetUser].classes.length">
-						This user has no classes assigned to them
+					<div class="alert alert-danger" role="alert" *ngIf="!userList[this.targetUser].subjects.length">
+						This user has no subjects assigned to them
 					</div>
 				</div>
 				<div class="modal-footer">

@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.studentskaSluzbaAngular.models.ERole;
 import com.studentskaSluzbaAngular.models.Role;
 import com.studentskaSluzbaAngular.models.User;
-import com.studentskaSluzbaAngular.models.Class;
+import com.studentskaSluzbaAngular.models.Subject;
 import com.studentskaSluzbaAngular.payload.request.SignupRequest;
 import com.studentskaSluzbaAngular.payload.request.UpdateUserRequest;
 import com.studentskaSluzbaAngular.payload.response.MessageResponse;
-import com.studentskaSluzbaAngular.repository.ClassRepository;
+import com.studentskaSluzbaAngular.repository.SubjectRepository;
 import com.studentskaSluzbaAngular.repository.RoleRepository;
 import com.studentskaSluzbaAngular.repository.UserRepository;
 
@@ -40,7 +40,7 @@ public class UserAdminController {
 	RoleRepository roleRepository;
 
 	@Autowired
-	ClassRepository classRepository;
+	SubjectRepository subjectRepository;
 
 	@Autowired
 	PasswordEncoder encoder;
@@ -102,15 +102,15 @@ public class UserAdminController {
 					user.setRoles(roles);
 				});
 			}
-			if(!isEmpty(updateUserRequest.getClasss())) {
-				boolean shouldAdd = updateUserRequest.getClasss()>0;
-				Long tarId = Math.abs(updateUserRequest.getClasss());
-				Set<Class> classes = user.getClasses();
-				Optional<Class> tarClass = classRepository.findById(tarId);
-				tarClass.ifPresent(cls -> {
-					if(shouldAdd) classes.add(cls);
-					else classes.remove(cls);
-					user.setClasses(classes);
+			if(!isEmpty(updateUserRequest.getSubject())) {
+				boolean shouldAdd = updateUserRequest.getSubject()>0;
+				Long tarId = Math.abs(updateUserRequest.getSubject());
+				Set<Subject> subjects = user.getSubjects();
+				Optional<Subject> tarSubject = subjectRepository.findById(tarId);
+				tarSubject.ifPresent(cls -> {
+					if(shouldAdd) subjects.add(cls);
+					else subjects.remove(cls);
+					user.setSubjects(subjects);
 				});
 			}
 			userRepository.save(user);
@@ -181,17 +181,14 @@ public class UserAdminController {
 	}
 	
 	private boolean isEmpty(Long test) {
-		if(test == null || test == 0) return true;
-		else return false;
+		return test == null || test == 0;
 	}
 	
 	private boolean isEmpty(int test) {
-		if(test == 0) return true;
-		else return false;
+		return test == 0;
 	}
 	
 	private boolean isEmpty(String test) {
-		if(test == null || test == "") return true;
-		else return false;
+		return test == null || test == "";
 	}
 }

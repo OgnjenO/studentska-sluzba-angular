@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.studentskaSluzbaAngular.models.User;
-import com.studentskaSluzbaAngular.models.Class;
+import com.studentskaSluzbaAngular.models.Subject;
 import com.studentskaSluzbaAngular.models.Grade;
 import com.studentskaSluzbaAngular.payload.request.UpdateUserRequest;
 import com.studentskaSluzbaAngular.payload.response.MessageResponse;
-import com.studentskaSluzbaAngular.repository.ClassRepository;
+import com.studentskaSluzbaAngular.repository.SubjectRepository;
 import com.studentskaSluzbaAngular.repository.GradeRepository;
 import com.studentskaSluzbaAngular.repository.UserRepository;
 import com.studentskaSluzbaAngular.security.services.UserDetailsImpl;
@@ -39,7 +39,7 @@ public class UserController {
 	PasswordEncoder encoder;
 
 	@Autowired
-	ClassRepository classRepository;
+	SubjectRepository subjectRepository;
 
 	@Autowired
 	GradeRepository gradeRepository;
@@ -71,6 +71,7 @@ public class UserController {
 				.body(new MessageResponse("Error: Something is wrong with the request"));
 		
 		System.out.println("Updateself : " + curUser.getUsername());
+		System.out.println("Updateself : " + updateUserRequest.toString());
 		Optional<User> targetUser = null;
 		if(!userRepository.existsById(curUser.getId())) {
 			return ResponseEntity
@@ -84,15 +85,16 @@ public class UserController {
 		targetUser.ifPresent(user -> {
 			if(!isEmpty(updateUserRequest.getEmail())) user.setEmail(updateUserRequest.getEmail());
 			if(!isEmpty(updateUserRequest.getPassword())) user.setPassword(encoder.encode(updateUserRequest.getPassword()));
-			if(!isEmpty(updateUserRequest.getClasss())) {
-				boolean shouldAdd = updateUserRequest.getClasss()>0;
-				Long tarId = Math.abs(updateUserRequest.getClasss());
-				Set<Class> classes = user.getClasses();
-				Optional<Class> tarClass = classRepository.findById(tarId);
-				tarClass.ifPresent(cls -> {
-					if(shouldAdd) classes.add(cls);
-					else classes.remove(cls);
-					user.setClasses(classes);
+			System.out.println("getSubject : " + updateUserRequest.getSubject());
+			if(!isEmpty(updateUserRequest.getSubject())) {
+				boolean shouldAdd = updateUserRequest.getSubject()>0;
+				Long tarId = Math.abs(updateUserRequest.getSubject());
+				Set<Subject> subjects = user.getSubjects();
+				Optional<Subject> tarSubject = subjectRepository.findById(tarId);
+				tarSubject.ifPresent(sub -> {
+					if(shouldAdd) subjects.add(sub);
+					else subjects.remove(sub);
+					user.setSubjects(subjects);
 				});
 			}
 			userRepository.save(user);
@@ -129,18 +131,15 @@ public class UserController {
 	}
 	
 	private boolean isEmpty(Long test) {
-		if(test == null || test == 0) return true;
-		else return false;
+		return test == null || test == 0;
 	}
 	
 	private boolean isEmpty(int test) {
-		if(test == 0) return true;
-		else return false;
+		return test == 0;
 	}
 	
 	private boolean isEmpty(String test) {
-		if(test == null || test == "") return true;
-		else return false;
+		return test == null || test == "";
 	}
 	
 	public UserDetailsImpl getCurUser() {

@@ -76,7 +76,7 @@ public class AuthController {
 												userDetails.getLastname(),
 												userDetails.getYear(),
 												userDetails.getGrade(),
-												userDetails.getClasses(),
+												userDetails.getSubjects(),
 												 roles));
 	}
 
@@ -124,11 +124,6 @@ public class AuthController {
 
 	@GetMapping("/canRegister")
 	public boolean canRegister() {
-		if(isDisabledSignup) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		return !isDisabledSignup;
 	}
 }
