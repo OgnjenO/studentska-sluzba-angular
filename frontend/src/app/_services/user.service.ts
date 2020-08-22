@@ -29,6 +29,12 @@ export class UserService {
     }, httpOptions);
   }
 
+  getSelfGrades(id): Observable<any> {
+    return this.http.post(USER_API_URL + 'getSelfGrades', {
+      id: id
+    }, httpOptions);
+  }
+
   getPublicContent(): Observable<any> {
     return this.http.get(API_URL + 'all');
   }

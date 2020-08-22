@@ -31,10 +31,10 @@
       {{ role }}
     </li>
   </ul>
-  <strong>Classes :</strong>
+  <strong>Grades :</strong>
   <ul>
-    <li *ngFor="let class of currentUser.classes">
-      {{ class.name }}
+    <li *ngFor="let grade of grades">
+      {{ grade.classs.name }} : <span class="badge badge-danger" *ngIf="grade.grade<6">Pao</span><span class="badge badge-success" *ngIf="grade.grade>=6">{{grade.grade}}</span>
     </li>
   </ul>
 </div>

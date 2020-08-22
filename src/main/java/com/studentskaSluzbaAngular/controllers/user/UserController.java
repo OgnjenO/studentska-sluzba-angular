@@ -1,5 +1,6 @@
 package com.studentskaSluzbaAngular.controllers.user;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.studentskaSluzbaAngular.models.User;
 import com.studentskaSluzbaAngular.models.Class;
+import com.studentskaSluzbaAngular.models.Grade;
 import com.studentskaSluzbaAngular.payload.request.UpdateUserRequest;
 import com.studentskaSluzbaAngular.payload.response.MessageResponse;
 import com.studentskaSluzbaAngular.repository.ClassRepository;
+import com.studentskaSluzbaAngular.repository.GradeRepository;
 import com.studentskaSluzbaAngular.repository.UserRepository;
 import com.studentskaSluzbaAngular.security.services.UserDetailsImpl;
 
@@ -37,6 +40,9 @@ public class UserController {
 
 	@Autowired
 	ClassRepository classRepository;
+
+	@Autowired
+	GradeRepository gradeRepository;
 	
 	@GetMapping("/getCurrentUser")
 	public ResponseEntity<?> getCurrentUser() {
@@ -94,6 +100,32 @@ public class UserController {
 			
 		
 		return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
+	}
+	
+	@PostMapping("/getSelfGrades")
+	public ResponseEntity<?> getSelfGrades(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
+		UserDetailsImpl curUser = this.getCurUser();
+		if(curUser == null)
+			return ResponseEntity
+				.badRequest()
+				.body(new MessageResponse("Error: Something is wrong with the request"));
+		
+		System.out.println("getSelfGrades : " + curUser.getUsername());
+		User targetUser = null;
+		if(!userRepository.existsById(curUser.getId())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: No user with that name"));
+		}
+		else {
+			targetUser = userRepository.findById(curUser.getId()).get();
+		}
+		
+		List<Grade> grades = null;
+		
+		grades = gradeRepository.findByUser(targetUser);
+
+		return ResponseEntity.ok(grades);
 	}
 	
 	private boolean isEmpty(Long test) {
