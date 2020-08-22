@@ -30,6 +30,14 @@ export class UserService {
     }, httpOptions);
   }
 
+  registerExam(data): Observable<any> {
+    console.log('Registering exam data : ', data);
+    return this.http.post(USER_API_URL + 'registerExam', {
+      userid: data.userid,
+      subjectid: data.subjectid,
+    }, httpOptions);
+  }
+
   getSelfGrades(id): Observable<any> {
     return this.http.post(USER_API_URL + 'getSelfGrades', {
       id: id

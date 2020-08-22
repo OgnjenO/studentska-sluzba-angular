@@ -40,7 +40,7 @@
   <strong>Grades :</strong>
   <ul>
     <li *ngFor="let grade of grades">
-      {{ grade.subject.name }} : <span class="badge badge-danger" *ngIf="grade.grade<6">Failed</span><span class="badge badge-success" *ngIf="grade.grade>=6">{{grade.grade}}</span>
+      <span class="badge badge-info">{{ grade.createDateTime | date:'medium' }}</span> {{ grade.subject.name }} : <span class="badge badge-warning" *ngIf="grade.grade<5">Ungraded</span><span class="badge badge-danger" *ngIf="grade.grade==5">Failed</span><span class="badge badge-success" *ngIf="grade.grade>=6">{{grade.grade}}</span>
     </li>
   </ul>
 </div>

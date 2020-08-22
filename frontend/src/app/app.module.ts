@@ -19,6 +19,7 @@ import { AdminMainComponent } from './pages/admin/main/main.component';
 import { ManageUsersComponent } from './pages/admin/manage/users/users.component';
 import { ManageSubjectsComponent } from './pages/admin/manage/subjects/subjects.component';
 import { SubjectSignupComponent } from './pages/user/subjects/signup/signup.component';
+import { RegisterSubjectComponent } from './pages/user/subjects/exam/register/register.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { SubjectSignupComponent } from './pages/user/subjects/signup/signup.comp
     AdminMainComponent,
     ManageUsersComponent,
     ManageSubjectsComponent,
-    SubjectSignupComponent
+    SubjectSignupComponent,
+    RegisterSubjectComponent
   ],
   imports: [
     BrowserModule,

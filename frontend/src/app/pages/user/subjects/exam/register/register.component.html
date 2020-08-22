@@ -1,0 +1,56 @@
+<div class="container" *ngIf="currentUser; else loggedOut">
+  <header class="jumbotron">
+    <h3>
+      <strong>{{ currentUser.firstname }} {{ currentUser.lastname }} ({{ currentUser.username }})</strong> Exam registration
+    </h3>
+  </header>
+  <strong>Subjects :</strong>
+  <div class="alert alert-danger" role="alert" *ngIf="!currentUser.subjects.length">
+    This user has no subjects assigned to them
+  </div>
+  <table class="table" *ngIf="currentUser.subjects.length">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let subject of currentUser.subjects; index as i">
+        <th scope="row">{{i}}</th>
+        <th scope="row">{{subject.id}}</th>
+        <th>{{subject.name}}</th>
+        <th>
+          <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#modalWindowConfirm" (click)="openModal(i)"><fa-icon [icon]="plusIcon"></fa-icon></button>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Exam Registration Confirm Modal -->
+	<div class="modal fade" id="modalWindowConfirm" tabindex="-1" role="dialog" aria-labelledby="modalWindowLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" *ngIf="(this.targetSubject>=0 && currentUser.subjects[this.targetSubject])">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalWindowLabel">Register exam {{currentUser.subjects[this.targetSubject].name}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+				<div class="modal-body">
+					Are you sure you want to register an exam for {{currentUser.subjects[this.targetSubject].name}}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-success" data-dismiss="modal" (click)="this.registerExam()">Confirm</button>
+				</div>
+      </div>
+    </div>
+	</div>
+</div>
+
+<ng-template #loggedOut>
+  Please login.
+</ng-template>

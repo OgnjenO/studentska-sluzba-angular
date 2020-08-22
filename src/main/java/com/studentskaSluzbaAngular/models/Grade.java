@@ -1,5 +1,6 @@
 package com.studentskaSluzbaAngular.models;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -29,6 +30,14 @@ public class Grade {
 	
 	@UpdateTimestamp
 	private LocalDateTime updateDateTime;
+
+	public Grade() {
+	}
+
+	public Grade(Subject subject, User user) {
+		this.subject = subject;
+		this.user = user;
+	}
 
 	public Long getId() {
 		return id;

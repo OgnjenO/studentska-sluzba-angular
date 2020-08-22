@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import com.studentskaSluzbaAngular.payload.request.CreateGradeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -128,6 +129,53 @@ public class UserController {
 		grades = gradeRepository.findByUser(targetUser);
 
 		return ResponseEntity.ok(grades);
+	}
+
+	@PostMapping("/registerExam")
+	public ResponseEntity<?> registerExam(@Valid @RequestBody CreateGradeRequest createGradeRequest) {
+		System.out.println("registerExam : " + createGradeRequest.toString());
+		UserDetailsImpl curUser = this.getCurUser();
+		if(curUser == null)
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Something is wrong with the request"));
+
+		System.out.println("getSelfGrades : " + curUser.getUsername());
+		User targetUser = null;
+		if(!userRepository.existsById(curUser.getId())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: No user with that name"));
+		}
+		else {
+			targetUser = userRepository.findById(curUser.getId()).get();
+		}
+
+		if(!subjectRepository.existsById(createGradeRequest.getSubjectid())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: No subject with that id"));
+		}
+
+		if(!userRepository.existsById(createGradeRequest.getUserid())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: No user with that id"));
+		}
+
+		Subject s = subjectRepository.findById(createGradeRequest.getSubjectid()).get();
+		User u = userRepository.findById(createGradeRequest.getUserid()).get();
+
+		if(gradeRepository.existsByUserAndSubjectAndGradeIsNot(u, s, 5)) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Ungraded or passed registration for that subject already exists"));
+		}
+
+		Grade grade = new Grade(s, u);
+		gradeRepository.save(grade);
+
+		return ResponseEntity.ok(new MessageResponse("Exam registered successfully!"));
 	}
 	
 	private boolean isEmpty(Long test) {
