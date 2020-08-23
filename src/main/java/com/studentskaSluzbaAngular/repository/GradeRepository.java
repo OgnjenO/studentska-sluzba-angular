@@ -18,7 +18,11 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
 
 	List<Grade> findBySubject(Subject subject);
 
+	boolean existsById(Long id);
+
 	boolean existsByUserAndSubjectAndGradeIsNot(User user, Subject subject, int grade);
+
+	List<Grade> findByUserAndGradeIs(User user, int grade);
 	
 	List<Grade> findAll();
 }

@@ -13,7 +13,8 @@
           <a class="dropdown-item" href="/admin/users">Users</a>
           <a class="dropdown-item" href="/admin/subjects">Subjects</a>
         </div>
-      </li><li class="nav-item dropdown" *ngIf="showStudentPanel">
+      </li>
+      <li class="nav-item dropdown" *ngIf="showStudentPanel">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Student Panel
         </a>
@@ -21,6 +22,16 @@
           <a class="dropdown-item" href="/student/subjects">Subjects</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/student/subjects/exam/register">Exam registration</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown" *ngIf="showProfessorPanel">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Professor Panel
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/professor/subjects">Subjects</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/professor/subjects/exam/grade">Exam grading</a>
         </div>
       </li>
     </ul>

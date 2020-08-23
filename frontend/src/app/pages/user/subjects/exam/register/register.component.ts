@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../../../_services/global.service';
 import { TokenStorageService } from '../../../../../_services/token-storage.service';
-import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare, faList } from '@fortawesome/free-solid-svg-icons';
 import { UserService } from '../../../../../_services/user.service'
 
 @Component({
@@ -11,9 +11,11 @@ import { UserService } from '../../../../../_services/user.service'
 })
 export class RegisterSubjectComponent implements OnInit {
   currentUser: any;
+  gradesList: any;
   form: any = {};
 
   plusIcon = faPlusSquare;
+  listIcon = faList;
 
   targetSubject;
 
@@ -22,6 +24,20 @@ export class RegisterSubjectComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this.token.getUser();
     console.log('Current user : ', this.token.getUser());
+    this.updateGradeList();
+  }
+
+  updateGradeList() {
+    this.userService.getSelfGrades(this.currentUser.id).subscribe(
+      data => {
+        this.gradesList = data;
+        console.log(data);
+        console.log('Grade history : ', data);
+      },
+      err => {
+        console.log('Error grade history : ', err);
+      }
+    );
   }
 
   openModal(target) {
@@ -36,6 +52,7 @@ export class RegisterSubjectComponent implements OnInit {
   registerExam() {
     this.userService.registerExam(this.form).subscribe(
       data => {
+        this.updateGradeList();
         console.log(data);
         console.log('Register exam : ', data);
       },

@@ -159,4 +159,11 @@ public class User {
 	public void setSubjects(Set<Subject> subjects) {
 		this.subjects = subjects;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!obj.getClass().equals(this.getClass())) return false;
+		User u = (User) obj;
+		return u.getId() == this.getId();
+	}
 }

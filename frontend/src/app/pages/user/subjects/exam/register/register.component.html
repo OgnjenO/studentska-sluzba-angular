@@ -23,6 +23,7 @@
         <th scope="row">{{subject.id}}</th>
         <th>{{subject.name}}</th>
         <th>
+          <button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#modalWindowListExams" (click)="openModal(i)"><fa-icon [icon]="listIcon"></fa-icon></button>
           <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#modalWindowConfirm" (click)="openModal(i)"><fa-icon [icon]="plusIcon"></fa-icon></button>
         </th>
       </tr>
@@ -45,6 +46,33 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					<button type="submit" class="btn btn-success" data-dismiss="modal" (click)="this.registerExam()">Confirm</button>
+				</div>
+      </div>
+    </div>
+	</div>
+
+  <!-- Exam List Modal -->
+	<div class="modal fade" id="modalWindowListExams" tabindex="-1" role="dialog" aria-labelledby="modalWindowLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" *ngIf="(this.targetSubject>=0 && currentUser.subjects[this.targetSubject])">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalWindowLabel">Exam list for {{currentUser.subjects[this.targetSubject].name}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+				<div class="modal-body">
+          List of all previous exams for {{currentUser.subjects[this.targetSubject].name}}
+          <ul>
+            <ng-container *ngFor="let grade of gradesList">
+              <li *ngIf="grade.subject.id == currentUser.subjects[this.targetSubject].id">
+                <span ><span class="badge badge-info">{{ grade.createDateTime | date:'medium' }}</span> {{ grade.subject.name }} : <span class="badge badge-warning" *ngIf="grade.grade<5">Ungraded</span><span class="badge badge-danger" *ngIf="grade.grade==5">Failed</span><span class="badge badge-success" *ngIf="grade.grade>=6">{{grade.grade}}</span></span>
+              </li>
+            </ng-container>
+          </ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				</div>
       </div>
     </div>

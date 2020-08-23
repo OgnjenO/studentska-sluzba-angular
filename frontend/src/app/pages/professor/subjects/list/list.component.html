@@ -1,0 +1,111 @@
+<div class="container" *ngIf="currentUser; else loggedOut">
+  <header class="jumbotron">
+    <h3>
+      <strong>{{ currentUser.firstname }} {{ currentUser.lastname }} ({{ currentUser.username }})</strong> Exam registration
+    </h3>
+  </header>
+  <strong>Subjects :</strong>
+  <div class="alert alert-danger" role="alert" *ngIf="!currentUser.subjects.length">
+    This user has no subjects assigned to them
+  </div>
+  <table class="table" *ngIf="currentUser.subjects.length">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let subject of currentUser.subjects; index as i">
+        <th scope="row">{{i}}</th>
+        <th scope="row">{{subject.id}}</th>
+        <th>{{subject.name}}</th>
+        <th>
+          <button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#modalWindowListExams" (click)="openModal(i)"><fa-icon [icon]="listIcon"></fa-icon></button>
+          <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#modalWindowConfirm" (click)="openModal(i)"><fa-icon [icon]="plusIcon"></fa-icon></button>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Exam List Modal -->
+	<div class="modal fade" id="modalWindowListExams" tabindex="-1" role="dialog" aria-labelledby="modalWindowLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content" *ngIf="(this.targetSubject>=0 && currentUser.subjects[this.targetSubject])">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalWindowLabel">Exam list for {{currentUser.subjects[this.targetSubject].name}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+				<div class="modal-body">
+          List of all previous exams for {{currentUser.subjects[this.targetSubject].name}}
+
+          <table class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">id</th>
+								<th scope="col">Date</th>
+								<th scope="col">Subject</th>
+								<th scope="col">Name</th>
+                <th scope="col">Grade</th>
+                <th scope="col">New grade</th>
+								<th scope="col">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+              <ng-container *ngFor="let exam of gradesList; index as i">
+                <tr *ngIf="exam.subject.id == currentUser.subjects[this.targetSubject].id">
+                  <th scope="row">{{i}}</th>
+                  <th scope="row">{{exam.id}}</th>
+                  <th><span class="badge badge-info">{{ exam.createDateTime | date:'medium' }}</span></th>
+                  <th>{{exam.subject.name}}</th>
+                  <th>{{exam.user.firstname}} {{exam.user.lastname}}</th>
+                  <th><span class="badge badge-warning" *ngIf="exam.grade<5">Ungraded</span><span class="badge badge-danger" *ngIf="exam.grade==5">Failed</span><span class="badge badge-success" *ngIf="exam.grade>5">{{exam.grade}}</span></th>
+                  <th>
+                    <form
+                      name="gradeForm"
+                      (ngSubmit)="f.gradeForm.valid && onSaveModal()"
+                      #f="ngForm"
+                      novalidate
+                    >
+                      <input
+                        type="number"
+                        class="form-control"
+                        name="grade"
+                        [(ngModel)]="exam.newGrade"
+                        [disabled]="exam.waiting || exam.success || exam.failure"
+                        placeholder="5-10"
+                        min="5"
+                        max="10"
+                        #grade="ngModel"
+                      />
+                    </form>
+                  </th>
+                  <th><button (click)="tryToGrade(i)" [disabled]="isGradeButtonDisabled(i)" type="button" class="btn mr-3"
+                    [ngClass]="{'btn-success': exam.success, 'btn-danger': exam.failure, 'btn-primary': !exam.success && !exam.failure }"
+                  >
+                    <fa-icon [icon]="checkIcon" *ngIf="this.targetExam !== i && !exam.failure && !exam.success"></fa-icon>
+                    <span *ngIf="this.targetExam === i && !exam.failure && !exam.success">Confirm</span>
+                    <span *ngIf="exam.success">Success</span>
+                    <span *ngIf="exam.failure">Failure</span>
+                  </button></th>
+                </tr>
+              </ng-container>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loggedOut>
+  Please login.
+</ng-template>

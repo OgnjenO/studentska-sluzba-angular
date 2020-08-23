@@ -10,6 +10,7 @@ import com.studentskaSluzbaAngular.payload.request.CreateGradeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -106,6 +107,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/getSelfGrades")
+	@PreAuthorize("hasRole('STUDENT')")
 	public ResponseEntity<?> getSelfGrades(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
 		UserDetailsImpl curUser = this.getCurUser();
 		if(curUser == null)
@@ -132,6 +134,7 @@ public class UserController {
 	}
 
 	@PostMapping("/registerExam")
+	@PreAuthorize("hasRole('STUDENT')")
 	public ResponseEntity<?> registerExam(@Valid @RequestBody CreateGradeRequest createGradeRequest) {
 		System.out.println("registerExam : " + createGradeRequest.toString());
 		UserDetailsImpl curUser = this.getCurUser();
@@ -157,7 +160,7 @@ public class UserController {
 					.body(new MessageResponse("Error: No subject with that id"));
 		}
 
-		if(!userRepository.existsById(createGradeRequest.getUserid())) {
+		if(!userRepository.existsById(curUser.getId())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: No user with that id"));

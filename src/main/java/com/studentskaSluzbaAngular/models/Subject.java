@@ -68,4 +68,11 @@ public class Subject {
 				", users=" + users +
 				'}';
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!obj.getClass().equals(this.getClass())) return false;
+		User u = (User) obj;
+		return u.getId() == this.getId();
+	}
 }
