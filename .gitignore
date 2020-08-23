@@ -30,3 +30,4 @@ build/
 ### VS Code ###
 .vscode/
 /node_modules/
+src/main/resources/application.properties
