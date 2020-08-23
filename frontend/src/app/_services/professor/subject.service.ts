@@ -25,7 +25,7 @@ export class SubjectService {
     console.log('gradeExam data : ', data);
     return this.http.post(PROFESSOR_SUBJECT_URL + 'gradeExam', {
       id: data.id,
-      grade: 2
+      grade: data.grade
     }, httpOptions);
   }
 }
