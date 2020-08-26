@@ -105,6 +105,13 @@ public class SubjectProfessorController {
         }
 
         Grade g = gradeRepository.findById(updateGradeRequest.getId()).get();
+
+        if(g.getGrade() >= 5) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Exam already graded"));
+        }
+
         g.setGrade(updateGradeRequest.getGrade());
 
         gradeRepository.save(g);
