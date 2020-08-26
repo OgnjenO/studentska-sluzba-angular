@@ -87,7 +87,7 @@ export class GradeListComponent implements OnInit {
     scales: {
       yAxes: [{
         ticks: {
-          min: 4
+          min: 6
         }
       }]
     }
@@ -118,11 +118,13 @@ export class GradeListComponent implements OnInit {
         let gradeSum = 0;
         let gradeNum = 0;
         for(let i in this.gradesList) {
-          if(this.gradesList[i].grade >= 5) {
+          if(this.gradesList[i].grade > 5) {
+            this.lineChartData.grade.push(this.gradesList[i].grade);
+
             gradeSum += this.gradesList[i].grade;
             gradeNum++;
-            this.lineChartData.grade.push(this.gradesList[i].grade);
             this.lineChartData.average.push(gradeSum/gradeNum);
+
             this.lineChartLabels.push(this.gradesList[i].createDateTime.split("T")[0]);
           }
         }
