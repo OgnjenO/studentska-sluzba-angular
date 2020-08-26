@@ -51,7 +51,7 @@ export class GradeListComponent implements OnInit {
     scales: {
       yAxes: [{
         ticks: {
-          beginAtZero: true
+          beginAtZero: true,
         }
       }]
     }
@@ -61,8 +61,9 @@ export class GradeListComponent implements OnInit {
 
   lineChartType: string = 'line';
 
-  lineChartData: Array<any>;
+  lineChartData;
   lineChartDatasets: Array<any> = [
+    { data: this.lineChartData, label: 'Grades over time', lineTension: 0 },
     { data: this.lineChartData, label: 'Grades over time', lineTension: 0 }
   ];
 
@@ -70,14 +71,26 @@ export class GradeListComponent implements OnInit {
 
   lineChartColors: Array<any> = [
     {
-      backgroundColor: 'rgba(255, 155, 155, 0.2)',
-      borderColor: 'rgba(255, 155, 155, 0.7)',
+      borderColor: 'rgba(255, 255, 0, .7)',
+      backgroundColor: 'rgba(255, 255, 0, 0)',
+      borderWidth: 2,
+    },
+    {
+      borderColor: 'rgba(0, 255, 255, .7)',
+      backgroundColor: 'rgba(255, 255, 0, 0)',
       borderWidth: 2,
     }
   ];
 
   lineChartOptions: any = {
-    responsive: true
+    responsive: true,
+    scales: {
+      yAxes: [{
+        ticks: {
+          min: 4
+        }
+      }]
+    }
   };
 
   constructor( private token: TokenStorageService, private userService: UserService ) { }
@@ -88,24 +101,38 @@ export class GradeListComponent implements OnInit {
     this.userService.getSelfGrades(this.currentUser.id).subscribe(
       data => {
         this.gradesList = data;
+        console.log(this.gradesList);
         this.barChartData = [];
-        this.lineChartData = [];
-        for(let i in this.gradesList) {
-          console.log(this.gradesList[i]);
-          this.barChartData.push(this.gradesList[i].grade);
-          this.lineChartData.push(this.gradesList[i].grade);
-          this.lineChartLabels.push(this.gradesList[i].createDateTime.split("T")[0]);
-          console.log(this.barChartData);
-          
-          this.barChartDatasets = [
-            { data: this.barChartData, label: 'Grades' }
-          ];
-          this.lineChartDatasets = [
-            { data: this.lineChartData, label: 'Grades over time' }
-          ];
+
+        for(let i=10; i>=5; i--) {
+          this.barChartData.push(this.gradesList.filter(x => x.grade==i).length);
         }
-        console.log(data);
-        console.log('Grade history : ', data);
+
+        this.barChartData.push(this.gradesList.filter(x => x.grade<5).length);
+
+        this.barChartDatasets = [
+          { data: this.barChartData, label: 'Grades' }
+        ];
+
+        this.lineChartData = {grade: [], average: []};
+        let gradeSum = 0;
+        let gradeNum = 0;
+        for(let i in this.gradesList) {
+          if(this.gradesList[i].grade >= 5) {
+            gradeSum += this.gradesList[i].grade;
+            gradeNum++;
+            this.lineChartData.grade.push(this.gradesList[i].grade);
+            this.lineChartData.average.push(gradeSum/gradeNum);
+            this.lineChartLabels.push(this.gradesList[i].createDateTime.split("T")[0]);
+          }
+        }
+
+        this.lineChartDatasets = [
+          { data: this.lineChartData.grade, label: 'Grades over time' },
+          { data: this.lineChartData.average, label: 'Average over time' }
+        ];
+
+        console.log(this.lineChartData);
       },
       err => {
         console.log('Error grade history : ', err);
