@@ -52,7 +52,7 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 	
-	boolean isDisabledSignup = false;
+	boolean isDisabledSignup = true;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
