@@ -4,18 +4,20 @@
       <strong>{{ currentUser.firstname }} {{ currentUser.lastname }} ({{ currentUser.username }})</strong> Subjects
     </h3>
   </header>
-  <div class="row">
-    <div class="col-10">
+  <div class="text-success" *ngIf="this.form.subject">
+    Select subject to add
+  </div>
+  <div class="row mb-4">
+    <div class="col-11">
       <select class="h-100 w-100" [(ngModel)]="this.form.subject">
-        <option disabled selected value>Select subject to add</option>
+        <option disabled selected [value]="none">Select subject to add</option>
         <option *ngFor="let subject of subjectList; let i = index" [value]="subject.id">{{subject.name}}</option>
       </select>
     </div>
-    <div class="col-2" *ngIf="this.form.subject">
-      <button type="button" class="btn btn-success mr-3 float-right" (click)="updateSubject()"><fa-icon [icon]="plusIcon"></fa-icon></button>
+    <div class="col-1">
+      <button type="button" class="btn btn-success mr-3 float-right w-100" (click)="updateSubject()" [disabled]="!this.form.subject"><fa-icon [icon]="plusIcon"></fa-icon></button>
     </div>
   </div>
-  <strong>Subjects :</strong>
   <div class="alert alert-danger" role="alert" *ngIf="!currentUser.subjects.length">
     This user has no subjects assigned to them
   </div>

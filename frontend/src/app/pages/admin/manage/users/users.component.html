@@ -10,8 +10,8 @@
     {{errorMessage}}
     </div>
   </header>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalWindow" (click)="openModalNewUser()"><fa-icon [icon]="plusIcon"></fa-icon></button>
-  <table class="table">
+	<button type="button" class="btn btn-primary btn-lg btn-block mb-4" data-toggle="modal" data-target="#modalWindow" (click)="openModalNewUser()"><fa-icon [icon]="plusIcon"></fa-icon> Add new user <fa-icon [icon]="plusIcon"></fa-icon></button>
+	<table class="table">
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
@@ -61,173 +61,173 @@
 					novalidate
 				>
 					<div class="modal-body">
-							<div class="form-group">
-								<label for="username">Username</label>
-								<input
-									type="text"
-									class="form-control"
-									name="username"
-									[(ngModel)]="form.username"
-									[placeholder]="this.newUser ? this.newUser.username : this.userList[this.targetUser].username"
-									minlength="3"
-									maxlength="20"
-									[required]="this.newUser"
-									#username="ngModel"
-								/>
-								<div class="alert-danger" *ngIf="username.invalid">
-									<div *ngIf="username.errors.required">Username is required</div>
-									<div *ngIf="username.errors.minlength">
-										Username must be at least 3 characters
-									</div>
-									<div *ngIf="username.errors.maxlength">
-										Username must be at most 20 characters
-									</div>
+						<div class="form-group">
+							<label for="password">Role</label>
+							<select
+								name="role"
+								[(ngModel)]="form.role"
+								[required]="this.newUser"
+								#role="ngModel"
+							>
+								<option *ngFor="let role of roles; let i = index">{{role}}</option>
+							</select>
+							<div class="text-danger" *ngIf="role.invalid">
+								<div *ngIf="role.errors.required">Role is required</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="username">Username</label>
+							<input
+								type="text"
+								class="form-control"
+								name="username"
+								[(ngModel)]="form.username"
+								[placeholder]="this.newUser ? this.newUser.username : this.userList[this.targetUser].username"
+								minlength="3"
+								maxlength="20"
+								[required]="this.newUser"
+								#username="ngModel"
+							/>
+							<div class="text-danger" *ngIf="username.invalid">
+								<div *ngIf="username.errors.required">Username is required</div>
+								<div *ngIf="username.errors.minlength">
+									Username must be at least 3 characters
+								</div>
+								<div *ngIf="username.errors.maxlength">
+									Username must be at most 20 characters
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="email">Email</label>
-								<input
-									type="email"
-									class="form-control"
-									name="email"
-									[(ngModel)]="form.email"
-									[placeholder]="this.newUser ? this.newUser.email : userList[this.targetUser].email"
-									email
-									[required]="this.newUser"
-									#email="ngModel"
-								/>
-								<div class="alert-danger" *ngIf="email.invalid">
-									<div *ngIf="email.errors.required">Email is required</div>
-									<div *ngIf="email.errors.email">
-										Email must be a valid email address
-									</div>
+						</div>
+						<div class="form-group">
+							<label for="email">Email</label>
+							<input
+								type="email"
+								class="form-control"
+								name="email"
+								[(ngModel)]="form.email"
+								[placeholder]="this.newUser ? this.newUser.email : userList[this.targetUser].email"
+								email
+								[required]="this.newUser"
+								#email="ngModel"
+							/>
+							<div class="text-danger" *ngIf="email.invalid">
+								<div *ngIf="email.errors.required">Email is required</div>
+								<div *ngIf="email.errors.email">
+									Email must be a valid email address
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="username">First name</label>
-								<input
-									type="text"
-									class="form-control"
-									name="firstname"
-									[(ngModel)]="form.firstname"
-									[placeholder]="this.newUser ? this.newUser.firstname : userList[this.targetUser].firstname"
-									minlength="3"
-									maxlength="20"
-									[required]="this.newUser"
-									#firstname="ngModel"
-								/>
-								<div class="alert-danger" *ngIf="firstname.invalid">
-									<div *ngIf="firstname.errors.required">First name is required</div>
-									<div *ngIf="firstname.errors.minlength">
-										First name must be at least 3 characters
-									</div>
-									<div *ngIf="firstname.errors.maxlength">
-										First name must be at most 20 characters
-									</div>
+						</div>
+						<div class="form-group">
+							<label for="username">First name</label>
+							<input
+								type="text"
+								class="form-control"
+								name="firstname"
+								[(ngModel)]="form.firstname"
+								[placeholder]="this.newUser ? this.newUser.firstname : userList[this.targetUser].firstname"
+								minlength="3"
+								maxlength="20"
+								[required]="this.newUser"
+								#firstname="ngModel"
+							/>
+							<div class="text-danger" *ngIf="firstname.invalid">
+								<div *ngIf="firstname.errors.required">First name is required</div>
+								<div *ngIf="firstname.errors.minlength">
+									First name must be at least 3 characters
+								</div>
+								<div *ngIf="firstname.errors.maxlength">
+									First name must be at most 20 characters
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="username">Last name</label>
-								<input
-									type="text"
-									class="form-control"
-									name="lastname"
-									[(ngModel)]="form.lastname"
-									[placeholder]="this.newUser ? this.newUser.lastname : userList[this.targetUser].lastname"
-									minlength="3"
-									maxlength="20"
-									[required]="this.newUser"
-									#lastname="ngModel"
-								/>
-								<div class="alert-danger" *ngIf="lastname.invalid">
-									<div *ngIf="lastname.errors.required">Last name is required</div>
-									<div *ngIf="lastname.errors.minlength">
-										Last name must be at least 3 characters
-									</div>
-									<div *ngIf="lastname.errors.maxlength">
-										Last name must be at most 20 characters
-									</div>
+						</div>
+						<div class="form-group">
+							<label for="username">Last name</label>
+							<input
+								type="text"
+								class="form-control"
+								name="lastname"
+								[(ngModel)]="form.lastname"
+								[placeholder]="this.newUser ? this.newUser.lastname : userList[this.targetUser].lastname"
+								minlength="3"
+								maxlength="20"
+								[required]="this.newUser"
+								#lastname="ngModel"
+							/>
+							<div class="text-danger" *ngIf="lastname.invalid">
+								<div *ngIf="lastname.errors.required">Last name is required</div>
+								<div *ngIf="lastname.errors.minlength">
+									Last name must be at least 3 characters
+								</div>
+								<div *ngIf="lastname.errors.maxlength">
+									Last name must be at most 20 characters
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="username">Grade</label>
-								<input
-									type="number"
-									class="form-control"
-									name="grade"
-									[(ngModel)]="form.grade"
-									[placeholder]="this.newUser ? this.newUser.grade : userList[this.targetUser].grade"
-									min="1"
-									max="10"
-									[required]="this.newUser"
-									#grade="ngModel"
-								/>
-								<div class="alert-danger" *ngIf="grade.invalid">
-									<div *ngIf="grade.errors.required">Grade is required</div>
-									<div *ngIf="grade.errors.min">
-										Grade must be at least 1 characters
-									</div>
-									<div *ngIf="grade.errors.max">
-										Grade must be at most 10 characters
-									</div>
+						</div>
+						<div class="form-group">
+							<label for="username">Grade</label>
+							<input
+								type="number"
+								class="form-control"
+								name="grade"
+								[(ngModel)]="form.grade"
+								[placeholder]="this.newUser ? this.newUser.grade : userList[this.targetUser].grade"
+								min="1"
+								max="10"
+								[required]="this.newUser"
+								#grade="ngModel"
+							/>
+							<div class="text-danger" *ngIf="grade.invalid">
+								<div *ngIf="grade.errors.required">Grade is required</div>
+								<div *ngIf="grade.errors.min">
+									Grade must be at least 1 characters
+								</div>
+								<div *ngIf="grade.errors.max">
+									Grade must be at most 10 characters
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="username">Year</label>
-								<input
-									type="number"
-									class="form-control"
-									name="year"
-									[(ngModel)]="form.year"
-									[placeholder]="this.newUser ? this.newUser.year : userList[this.targetUser].year"
-									min="1"
-									max="10"
-									[required]="this.newUser"
-									#year="ngModel"
-								/>
-								<div class="alert-danger" *ngIf="year.invalid">
-									<div *ngIf="year.errors.required">Year is required</div>
-									<div *ngIf="year.errors.min">
-										Year must be at least 1 characters
-									</div>
-									<div *ngIf="year.errors.min">
-										Year must be at most 10 characters
-									</div>
+						</div>
+						<div class="form-group">
+							<label for="username">Year</label>
+							<input
+								type="number"
+								class="form-control"
+								name="year"
+								[(ngModel)]="form.year"
+								[placeholder]="this.newUser ? this.newUser.year : userList[this.targetUser].year"
+								min="1"
+								max="10"
+								[required]="this.newUser"
+								#year="ngModel"
+							/>
+							<div class="text-danger" *ngIf="year.invalid">
+								<div *ngIf="year.errors.required">Year is required</div>
+								<div *ngIf="year.errors.min">
+									Year must be at least 1 characters
+								</div>
+								<div *ngIf="year.errors.min">
+									Year must be at most 10 characters
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="password">Password</label>
-								<input
-									type="password"
-									class="form-control"
-									name="password"
-									[(ngModel)]="form.password"
-									[placeholder]="this.newUser ? '*****' : ''"
-									minlength="6"
-									[required]="this.newUser"
-									#password="ngModel"
-								/>
-								<div class="alert-danger" *ngIf="password.invalid">
-									<div *ngIf="password.errors.required">Password is required</div>
-									<div *ngIf="password.errors.minlength">
-										Password must be at least 6 characters
-									</div>
+						</div>
+						<div class="form-group">
+							<label for="password">Password</label>
+							<input
+								type="password"
+								class="form-control"
+								name="password"
+								[(ngModel)]="form.password"
+								[placeholder]="this.newUser ? '*****' : ''"
+								minlength="6"
+								[required]="this.newUser"
+								#password="ngModel"
+							/>
+							<div class="text-danger" *ngIf="password.invalid">
+								<div *ngIf="password.errors.required">Password is required</div>
+								<div *ngIf="password.errors.minlength">
+									Password must be at least 6 characters
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="password">Role</label>
-								<select
-									name="role"
-									[(ngModel)]="form.role"
-									[required]="this.newUser"
-									#role="ngModel"
-								>
-									<option *ngFor="let role of roles; let i = index">{{role}}</option>
-								</select>
-								<div class="alert-danger" *ngIf="role.invalid">
-									<div *ngIf="role.errors.required">Role is required</div>
-								</div>
-							</div>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -303,7 +303,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<div class="alert alert-danger" role="alert" *ngIf="!userList[this.targetUser].subjects.length">
+					<div class="alert text-danger" role="alert" *ngIf="!userList[this.targetUser].subjects.length">
 						This user has no subjects assigned to them
 					</div>
 				</div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../../_services/global.service';
 import { TokenStorageService } from '../../../../_services/token-storage.service';
-import { faPlusSquare, faList, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare, faList, faCheckSquare, faHistory } from '@fortawesome/free-solid-svg-icons';
 import { SubjectService } from '../../../../_services/professor/subject.service'
 
 @Component({
@@ -18,9 +18,12 @@ export class SubjectListComponent implements OnInit {
   plusIcon = faPlusSquare;
   listIcon = faList;
   checkIcon = faCheckSquare;
+  historyIcon = faHistory;
 
   targetExam = -1;
   targetSubject;
+
+  isGrading = false;
 
   constructor( private globalService: GlobalService, private token: TokenStorageService, private subjectService: SubjectService, private tokenStorage: TokenStorageService ) { }
 
@@ -47,6 +50,16 @@ export class SubjectListComponent implements OnInit {
         console.log('Error list history : ', err);
       }
     );
+  }
+
+  openModalHistory(target) {
+    this.isGrading = false;
+    this.openModal(target);
+  }
+
+  openModalGrade(target) {
+    this.isGrading = true;
+    this.openModal(target);
   }
 
   openModal(target) {

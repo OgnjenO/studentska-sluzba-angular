@@ -1,0 +1,24 @@
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">id</th>
+      <th scope="col">Date</th>
+      <th scope="col">Subject</th>
+      <th scope="col">Name</th>
+      <th scope="col">Grade</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let exam of gradesList; index as i">
+      <tr>
+        <th scope="row">{{i}}</th>
+        <th scope="row">{{exam.id}}</th>
+        <th><span class="badge badge-info">{{ exam.createDateTime | date:'medium' }}</span></th>
+        <th>{{exam.subject.name}}</th>
+        <th>{{exam.user.firstname}} {{exam.user.lastname}}</th>
+        <th><span class="badge badge-warning" *ngIf="exam.grade<5">Ungraded</span><span class="badge badge-danger" *ngIf="exam.grade==5">Failed</span><span class="badge badge-success" *ngIf="exam.grade>5">{{exam.grade}}</span></th>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>

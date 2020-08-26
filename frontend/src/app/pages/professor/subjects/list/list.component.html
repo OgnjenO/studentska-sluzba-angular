@@ -14,7 +14,8 @@
         <th scope="col">#</th>
         <th scope="col">id</th>
         <th scope="col">Name</th>
-        <th scope="col">Actions</th>
+        <th scope="col">History</th>
+        <th scope="col">Grade</th>
       </tr>
     </thead>
     <tbody>
@@ -23,8 +24,10 @@
         <th scope="row">{{subject.id}}</th>
         <th>{{subject.name}}</th>
         <th>
-          <button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#modalWindowListExams" (click)="openModal(i)"><fa-icon [icon]="listIcon"></fa-icon></button>
-          <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#modalWindowConfirm" (click)="openModal(i)"><fa-icon [icon]="plusIcon"></fa-icon></button>
+          <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#modalWindowListExams" (click)="openModalHistory(i)"><fa-icon [icon]="historyIcon"></fa-icon></button>
+        </th>
+        <th>
+          <button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#modalWindowListExams" (click)="openModalGrade(i)"><fa-icon [icon]="listIcon"></fa-icon></button>
         </th>
       </tr>
     </tbody>
@@ -52,20 +55,20 @@
 								<th scope="col">Subject</th>
 								<th scope="col">Name</th>
                 <th scope="col">Grade</th>
-                <th scope="col">New grade</th>
-								<th scope="col">Actions</th>
+                <th scope="col" *ngIf="isGrading">New grade</th>
+								<th scope="col" *ngIf="isGrading">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
               <ng-container *ngFor="let exam of gradesList; index as i">
-                <tr *ngIf="exam.subject.id == currentUser.subjects[this.targetSubject].id">
+                <tr *ngIf="exam.subject.id == currentUser.subjects[this.targetSubject].id && ((isGrading && exam.grade<5) || (!isGrading && exam.grade>=5))">
                   <th scope="row">{{i}}</th>
                   <th scope="row">{{exam.id}}</th>
                   <th><span class="badge badge-info">{{ exam.createDateTime | date:'medium' }}</span></th>
                   <th>{{exam.subject.name}}</th>
                   <th>{{exam.user.firstname}} {{exam.user.lastname}}</th>
                   <th><span class="badge badge-warning" *ngIf="exam.grade<5">Ungraded</span><span class="badge badge-danger" *ngIf="exam.grade==5">Failed</span><span class="badge badge-success" *ngIf="exam.grade>5">{{exam.grade}}</span></th>
-                  <th>
+                  <th *ngIf="isGrading">
                     <form
                       name="gradeForm"
                       (ngSubmit)="f.gradeForm.valid && onSaveModal()"
@@ -85,7 +88,7 @@
                       />
                     </form>
                   </th>
-                  <th><button (click)="tryToGrade(i)" [disabled]="isGradeButtonDisabled(i)" type="button" class="btn mr-3"
+                  <th *ngIf="isGrading"><button (click)="tryToGrade(i)" [disabled]="isGradeButtonDisabled(i)" type="button" class="btn mr-3"
                     [ngClass]="{'btn-success': exam.success, 'btn-danger': exam.failure, 'btn-primary': !exam.success && !exam.failure }"
                   >
                     <fa-icon [icon]="checkIcon" *ngIf="this.targetExam !== i && !exam.failure && !exam.success"></fa-icon>

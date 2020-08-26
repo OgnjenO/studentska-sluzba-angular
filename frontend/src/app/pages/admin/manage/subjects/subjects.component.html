@@ -10,8 +10,8 @@
     {{errorMessage}}
     </div>
   </header>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalWindow" (click)="openModalNewSubject()"><fa-icon [icon]="plusIcon"></fa-icon></button>
-  <table class="table">
+  <button type="button" class="btn btn-primary btn-lg btn-block mb-4" data-toggle="modal" data-target="#modalWindow" (click)="openModalNewSubject()"><fa-icon [icon]="plusIcon"></fa-icon> Add new subject <fa-icon [icon]="plusIcon"></fa-icon></button>
+	<table class="table">
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
@@ -59,7 +59,7 @@
 									[required]="!this.targetSubject.id"
 									#name="ngModel"
 								/>
-								<div class="alert-danger" *ngIf="name.invalid">
+								<div class="text-danger" *ngIf="name.invalid">
 									<div *ngIf="name.errors.required">Name is required</div>
 								</div>
 							</div>

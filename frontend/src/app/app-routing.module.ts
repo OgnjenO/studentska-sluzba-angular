@@ -5,12 +5,11 @@ import { RegisterComponent } from './authentication/register/register.component'
 import { LoginComponent } from './authentication/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { BoardAdminComponent } from './pages/board-admin/board-admin.component';
 import { ManageUsersComponent } from './pages/admin/manage/users/users.component';
 import { ManageSubjectsComponent } from './pages/admin/manage/subjects/subjects.component';
 import { SubjectSignupComponent } from './pages/user/subjects/signup/signup.component';
 import { RegisterSubjectComponent } from './pages/user/subjects/exam/register/register.component';
-import { ExamGradeComponent } from './pages/professor/subjects/exam/grade/grade.component';
+import { GradeListComponent } from './pages/user/subjects/exam/list/list.component';
 import { SubjectListComponent } from './pages/professor/subjects/list/list.component';
 import { AuthGuard } from './_helpers/auth.guard';
 import { Role } from './_models/role';
@@ -28,11 +27,11 @@ const routes: Routes = [
   { path: 'student/subjects', redirectTo: 'student/subjects/signup', pathMatch: 'full' },
   { path: 'student/subjects/signup', component: SubjectSignupComponent, canActivate: [AuthGuard], data: {roles: [Role.student]} },
   { path: 'student/subjects/exam/register', component: RegisterSubjectComponent, canActivate: [AuthGuard], data: {roles: [Role.student]} },
+  { path: 'student/subjects/exam/list', component: GradeListComponent, canActivate: [AuthGuard], data: {roles: [Role.student]} },
 
   { path: 'professor', redirectTo: 'professor/subjects', pathMatch: 'full' },
   { path: 'professor/subjects', redirectTo: 'professor/subjects/list', pathMatch: 'full' },
   { path: 'professor/subjects/list', component: SubjectListComponent, canActivate: [AuthGuard], data: {roles: [Role.professor]} },
-  { path: 'professor/subjects/exam/grade', component: ExamGradeComponent, canActivate: [AuthGuard], data: {roles: [Role.professor]} },
 
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
