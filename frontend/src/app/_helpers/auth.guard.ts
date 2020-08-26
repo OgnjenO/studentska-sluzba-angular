@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
                     }
                 }
                 // role not authorised so redirect to home page
-                this.router.navigate(['/']);
+                this.router.navigate(['/home'], { state: { data: { 'message': 'You don\'t have access to that page' } } });
                 return false;
             }
 
