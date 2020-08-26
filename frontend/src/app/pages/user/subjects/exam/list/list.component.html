@@ -1,3 +1,29 @@
+<div class="row">
+  <div class="col-md-6">
+    <div style="display: block">
+      <canvas mdbChart
+        [chartType]="barChartType"
+        [datasets]="barChartDatasets"
+        [labels]="barChartLabels"
+        [colors]="barChartColors"
+        [options]="barChartOptions"
+        [legend]="true">
+      </canvas>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div style="display: block">
+      <canvas mdbChart
+        [chartType]="lineChartType"
+        [datasets]="lineChartDatasets"
+        [labels]="lineChartLabels"
+        [colors]="lineChartColors"
+        [options]="lineChartOptions"
+        [legend]="true">
+      </canvas> 
+    </div>
+  </div>
+</div>
 <table class="table">
   <thead class="thead-dark">
     <tr>
